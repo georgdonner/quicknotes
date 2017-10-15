@@ -2,6 +2,19 @@ import React, { Component } from 'react';
 import './Header.css';
 
 class Header extends Component {
+  constructor(props) {
+    super(props);
+    this.handleSearch = this.handleSearch.bind(this);
+  }
+
+  handleSearch(event) {
+    event.preventDefault();
+    const searchValue = this.refs.search.value;
+    this.props.handleSearch(searchValue);
+    this.refs.search.value = '';
+    this.refs.search.blur();
+  }
+
   render() {
     return (
       <nav className="navbar main-nav">
@@ -11,12 +24,12 @@ class Header extends Component {
               <span id="notebook">{this.props.notebook}</span>
             </div>
             <div className="navbar-item">
-              <p className="control has-icons-left">
-                <input className="input" id="search-field" type="search" placeholder="Search"/>
+              <form className="control has-icons-left" onSubmit={this.handleSearch}>
+                <input className="input" id="search-field" type="search" placeholder="Search" ref="search"/>
                 <span className="icon is-left">
                   <i className="fa fa-search"></i>
                 </span>
-              </p>
+              </form>
             </div>
           </div>
           <div className="navbar-end">
