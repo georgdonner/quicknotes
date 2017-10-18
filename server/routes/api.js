@@ -7,7 +7,31 @@ const notes = require('../models/notes');
 router.get('/:notebook/notes', async (req, res, next) => {
   try {
     const docs = await notes.all(req.params.notebook);
-    res.json({notes: docs});
+    res.json(docs);
+  } catch (err) {
+    res.status(404).send(err.message);
+  }
+});
+
+// Get one note
+router.get('/:notebook/note/:id', async (req, res, next) => {
+  try {
+    const note = await notes.get(req.params.notebook, req.params.id);
+    res.json(note);
+  } catch (err) {
+    res.status(404).send(err.message);
+  }
+});
+
+// Post a note
+router.post('/:notebook/notes', async (req, res, next) => {
+  const note = req.body;
+  note['isStarred'] = false;
+  note['createdAt'] = new Date(Date.now()).toISOString();
+  note['updatedAt'] = new Date(Date.now()).toISOString();
+  try {
+    const result = await notes.add(req.params.notebook, note);
+    res.json(result);
   } catch (err) {
     res.status(404).send(err.message);
   }

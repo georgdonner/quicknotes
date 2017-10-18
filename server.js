@@ -6,6 +6,9 @@ require('dotenv').config();
 
 const app = express();
 
+// parse POST body
+app.use(bodyParser.json());
+
 // serve static assets
 app.use(express.static(__dirname + '/build'));
 
