@@ -1,19 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-const db = require('./db');
+const notes = require('../models/notes');
 
 // Get all notes
-router.get('/:notebook/notes', (req, res, next) => {
-  db.get().collection(req.params.notebook, {strict: true}, (err, collection) => {
-    if (err) {
-      res.status(404).send('Error: Notebook not found');
-    } else {
-      collection.find().toArray((err, docs) => {
-        res.json({notes: docs});
-      });
-    }
-  });
+router.get('/:notebook/notes', async (req, res, next) => {
+  try {
+    const docs = await notes.all(req.params.notebook);
+    res.json({notes: docs});
+  } catch (err) {
+    res.status(404).send(err.message);
+  }
 });
 
 module.exports = router;
