@@ -9,7 +9,7 @@ router.get('/:notebook/notes', async (req, res, next) => {
     const docs = await notes.all(req.params.notebook);
     res.json(docs);
   } catch (err) {
-    res.status(404).send(err.message);
+    res.status(err.status).send(err.message);
   }
 });
 
@@ -19,7 +19,7 @@ router.get('/:notebook/note/:id', async (req, res, next) => {
     const note = await notes.get(req.params.notebook, req.params.id);
     res.json(note);
   } catch (err) {
-    res.status(404).send(err.message);
+    res.status(err.status).send(err.message);
   }
 });
 
@@ -30,7 +30,7 @@ router.post('/:notebook/notes', async (req, res, next) => {
     const result = await notes.add(req.params.notebook, note);
     res.json(result);
   } catch (err) {
-    res.status(404).send(err.message);
+    res.status(err.status).send(err.message);
   }
 });
 
@@ -41,7 +41,7 @@ router.put('/:notebook/note/:id', async (req, res, next) => {
     const result = await notes.update(req.params.notebook, req.params.id, data);
     res.json(result);
   } catch (err) {
-    res.status(404).send(err.message);
+    res.status(err.status).send(err.message);
   }
 });
 
