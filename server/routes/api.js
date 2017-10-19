@@ -26,9 +26,6 @@ router.get('/:notebook/note/:id', async (req, res, next) => {
 // Post a note
 router.post('/:notebook/notes', async (req, res, next) => {
   const note = req.body;
-  note['isStarred'] = false;
-  note['createdAt'] = new Date(Date.now()).toISOString();
-  note['updatedAt'] = new Date(Date.now()).toISOString();
   try {
     const result = await notes.add(req.params.notebook, note);
     res.json(result);
