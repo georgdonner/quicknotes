@@ -34,4 +34,15 @@ router.post('/:notebook/notes', async (req, res, next) => {
   }
 });
 
+// Update a note
+router.put('/:notebook/note/:id', async (req, res, next) => {
+  const data = req.body;
+  try {
+    const result = await notes.update(req.params.notebook, req.params.id, data);
+    res.json(result);
+  } catch (err) {
+    res.status(404).send(err.message);
+  }
+});
+
 module.exports = router;
