@@ -1,8 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
-const db = require('./server/db');
+const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 require('dotenv').config();
+
+// connect to database
+mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true });
+const dbConnection = mongoose.connection;
 
 const app = express();
 
@@ -13,8 +18,9 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname + '/build'));
 
 // hook up API
-const api = require('./server/routes/api');
-app.use('/api', api);
+app.use('/api', require('./server/routes/note'));
+app.use('/api', require('./server/routes/notebook'));
+app.use('/api', require('./server/routes/user'));
 
 // pass index.html from react to every other route in production
 if (process.env.NODE_ENV === 'production') {
@@ -26,13 +32,12 @@ if (process.env.NODE_ENV === 'production') {
 // get port from env
 const port = process.env.PORT || 8080;
 
-// connect to database
-db.connect(process.env.MONGODB_URI, function(err) {
-  if (err) {
-    console.error(err);
-  } else {
-    app.listen(port, () => {
-      console.log('Server started on port ' + port);
-    });
-  }
+// start server after successful database connection
+dbConnection.on('connected', () => {
+  console.log('Connected to database');
+  app.listen(port, () => {
+    console.log('Server started on port ' + port);
+  });
 });
+
+dbConnection.on('error', console.error.bind(console, 'connection error:'));
