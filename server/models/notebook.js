@@ -10,6 +10,24 @@ const NotebookSchema = new Schema({
   owner: {
     type: Schema.Types.ObjectId,
     ref: 'User'
+  },
+  viewers: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    default: []
+  }],
+  editors: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    default: []
+  }],
+  publicVisible: {
+    type: Boolean,
+    default: false
+  },
+  publicEdit: {
+    type: Boolean,
+    default: false
   }
 },{
   timestamps: true
@@ -17,7 +35,11 @@ const NotebookSchema = new Schema({
 const Notebook = module.exports = mongoose.model('Notebook', NotebookSchema);
 
 module.exports.getByUser = (id, callback) => {
-  Notebook.find({ owner: mongoose.Types.ObjectId(id) }, callback);
+  Notebook.find({ $or: [
+    {owner: mongoose.Types.ObjectId(id)},
+    {editors: mongoose.Types.ObjectId(id)},
+    {viewers: mongoose.Types.ObjectId(id)}
+  ]}, callback);
 }
 
 module.exports.getById = (id, callback) => {
@@ -32,7 +54,25 @@ module.exports.addNotebook = (newNotebook, userId, callback) => {
 module.exports.updateNotebook = (id, newData, callback) => {
   delete newData._id;
   delete newData.owner;
+  delete newData.viewers;
+  delete newData.editors;
   Notebook.findByIdAndUpdate(id, { $set: newData }, callback);
+}
+
+module.exports.addViewer = (id, userId, callback) => {
+  Notebook.findByIdAndUpdate(id, { $push: { viewers: mongoose.Types.ObjectId(userId) } }, callback);
+}
+
+module.exports.removeViewer = (id, userId, callback) => {
+  Notebook.findByIdAndUpdate(id, { $pull: { viewers: mongoose.Types.ObjectId(userId) } }, callback);
+}
+
+module.exports.addEditor = (id, userId, callback) => {
+  Notebook.findByIdAndUpdate(id, { $push: { editors: mongoose.Types.ObjectId(userId) } }, callback);
+}
+
+module.exports.removeEditor = (id, userId, callback) => {
+  Notebook.findByIdAndUpdate(id, { $pull: { editors: mongoose.Types.ObjectId(userId) } }, callback);
 }
 
 module.exports.updateOwner = (id, userId, callback) => {
@@ -45,4 +85,32 @@ module.exports.removeNotebook = (id, callback) => {
 
 module.exports.removeByOwner = (userId, callback) => {
   Notebook.find({ owner: mongoose.Types.ObjectId(userId)}).remove(callback);
+}
+
+module.exports.canView = (id, userId, callback) => {
+  Notebook.findById(id, (err, doc) => {
+    if (err) {
+      callback(err);
+    } else if (!doc) {
+      callback(new Error('Document doesn\'t exist'));
+    } else if (doc.owner === userId || doc.editors.indexOf(userId) !== -1 || doc.viewers.indexOf(userId) !== -1) {
+      callback(null, true);
+    } else {
+      callback(null, false);
+    }
+  });
+}
+
+module.exports.canEdit = (id, userId, callback) => {
+  Notebook.findById(id, (err, doc) => {
+    if (err) {
+      callback(err);
+    } else if (!doc) {
+      callback(new Error('Document doesn\'t exist'));
+    } else if (doc.owner === userId || doc.editors.indexOf(userId) !== -1) {
+      callback(null, true)
+    } else {
+      callback(null, false);
+    }
+  });
 }

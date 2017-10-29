@@ -13,16 +13,4 @@ router.get('/user/:user', (req, res, next) => {
   });
 });
 
-// Add a user
-router.post('/user', (req, res, next) => {
-  //TODO add advanced user logic
-  const user = new User(req.body);
-  User.addUser(user, (err, user) => {
-    if (err) {
-      res.status(400).send(err.message);
-    }
-    res.json(user);
-  });
-});
-
 module.exports = router;
