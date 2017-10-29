@@ -10,12 +10,12 @@ class Dashboard extends Component {
   render() {
     return (
       <div>
-        <Header 
+        <Header
           notebook={this.props.match.params.notebook}
           handleSearch={this.search}
         />
         <div className="container">
-          {this.props.match.params.notebook}
+          <span>{this.props.match.params.notebook}</span>
         </div>
       </div>
     );

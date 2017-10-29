@@ -4,9 +4,9 @@
   "private": true,
   "dependencies": {
     "body-parser": "^1.18.2",
+    "cookie-session": "^2.0.0-beta.3",
     "dotenv": "^4.0.0",
     "express": "^4.16.2",
-    "express-session": "^1.15.6",
     "mongoose": "^4.12.3",
     "passport": "^0.4.0",
     "passport-github2": "^0.1.11",
@@ -23,7 +23,11 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:8080",
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:8080"
+    }
+  },
   "devDependencies": {
     "nodemon": "^1.12.1"
   }

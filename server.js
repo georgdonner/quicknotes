@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const session = require('express-session');
+const session = require('cookie-session');
 const path = require('path');
 
 const passport = require('passport');
@@ -36,7 +36,7 @@ passport.serializeUser((user, done) => {
   done(null, user);
 });
 
-passport.deserializeUser(function(user, done) {
+passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
@@ -50,34 +50,33 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json());
 app.use(session({
+  name: 'quicknotes-session',
   secret: process.env.SESSION_SECRET,
-  resave: true,
-  saveUninitialized: true
+  maxAge: 24 * 60 * 60 * 1000
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(__dirname + '/build'));
 
-app.get('/', (req, res) => {
-  res.json(req.user);
-});
+app.get('/api/auth', passport.authenticate('github', { scope: [ 'user:email' ] }));
 
-app.get('/login', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'server/views', 'login.html'));
-});
-
-app.get('/account', ensureAuthenticated, (req, res) => {
-  res.send(`Hi ${req.user}, this is your account.`)
-});
-
-app.get('/auth', passport.authenticate('github', { scope: [ 'user:email' ] }));
-
-app.get('/auth/callback',
+app.get('/api/auth/callback',
   passport.authenticate('github', { failureRedirect: '/login' }),
   (req, res) => {
-    res.redirect('/account');
+    if (process.env.NODE_ENV === 'production') {
+      res.redirect('/');
+    } else {
+      res.redirect('http://127.0.0.1:3000');
+    }
   }
 );
+
+// redirect to React server in Development
+if (process.env.NODE_ENV !== 'production') {
+  app.get('/login', (req, res) => {
+    res.redirect('http://127.0.0.1:3000');
+  });
+}
 
 // hook up API
 app.use('/api', require('./server/routes/note'));
@@ -86,8 +85,8 @@ app.use('/api', require('./server/routes/user'));
 
 // pass index.html from react to every other route in production
 if (process.env.NODE_ENV === 'production') {
-  app.get('*', function (request, response){
-    response.sendFile(path.resolve(__dirname, 'build', 'index.html'));
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
   });
 }
 
@@ -103,10 +102,3 @@ dbConnection.on('connected', () => {
 });
 
 dbConnection.on('error', console.error.bind(console, 'connection error:'));
-
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect('/login');
-}
