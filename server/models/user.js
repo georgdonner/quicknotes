@@ -6,6 +6,11 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
   githubId: {
     type: String,
     required: true
@@ -24,12 +29,27 @@ module.exports.getById = (id, callback) => {
   User.findById(id, callback);
 }
 
-module.exports.getByUsername = (username, callback) => {
-  User.findOne({ username: username }, callback);
+module.exports.getByEmail = (email, callback) => {
+  User.findOne({ email: email }, callback);
 }
 
 module.exports.addUser = (userData, callback) => {
   userData.save(callback);
+}
+
+module.exports.findOrCreate = (data, callback) => {
+  const userData = new User(data);
+  User.findOne({ email: userData.email }, (err, user) => {
+    if (err) {
+      callback(err);
+    } else {
+      if (user) {
+        callback(null, user);
+      } else {
+        userData.save(callback);
+      }
+    }
+  });
 }
 
 module.exports.updateUser = (id, newData, callback) => {

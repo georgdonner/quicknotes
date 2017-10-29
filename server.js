@@ -8,25 +8,36 @@ const GitHubStrategy = require('passport-github2').Strategy;
 
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
+const User = require('./server/models/user');
 require('dotenv').config();
 
 passport.use(new GitHubStrategy({
-  clientID: process.env.GITHUB_CLIENT_ID,
-  clientSecret: process.env.GITHUB_CLIENT_SECRET,
-  callbackURL: process.env.GITHUB_CALLBACK_URL
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    callbackURL: process.env.GITHUB_CALLBACK_URL,
+    scope: ['user:email']
   },
   (accessToken, refreshToken, profile, done) => {
-    return done(null, profile);
+    User.findOrCreate({
+      username: profile.username,
+      email: profile.emails[0].value,
+      githubId: profile.id
+    }, (err, user) => {
+      if (err) {
+        return done(err);
+      }
+      return done(null, user);
+    });
   }
 ));
 
 // passport configuration
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, user);
 });
 
-passport.deserializeUser(function(id, done) {
-  done(null, id);
+passport.deserializeUser(function(user, done) {
+  done(null, user);
 });
 
 // connect to database
