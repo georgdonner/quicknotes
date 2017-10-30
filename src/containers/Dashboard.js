@@ -57,10 +57,11 @@ class Dashboard extends Component {
     return (
       <div>
         <Header
-          notebook={this.props.match.params.notebook}
+          notebook='Quicknotes'
           handleSearch={this.search}
         />
         <div className="container">
+          <div>User: {this.props.user.username}</div>
           <ul>{notebooks}</ul>
           <form onSubmit={this.handleSubmit}>
             <label>

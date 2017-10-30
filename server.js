@@ -52,7 +52,7 @@ app.use(bodyParser.json());
 app.use(session({
   name: 'quicknotes-session',
   secret: process.env.SESSION_SECRET,
-  maxAge: 24 * 60 * 60 * 1000
+  maxAge: 24 * 60 * 60 * 1000 * 30 // one month
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -74,7 +74,7 @@ app.get('/api/auth/callback',
 // redirect to React server in Development
 if (process.env.NODE_ENV !== 'production') {
   app.get('/login', (req, res) => {
-    res.redirect('http://127.0.0.1:3000');
+    res.redirect('http://127.0.0.1:3000/login');
   });
 }
 
