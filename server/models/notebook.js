@@ -43,7 +43,15 @@ module.exports.getByUser = (id, callback) => {
 }
 
 module.exports.getById = (id, callback) => {
-  Notebook.findById(id, callback);
+  Notebook.findById(id, (err, doc) => {
+    if (err) {
+      callback(err);
+    } else if (!doc) {
+      callback(new Error('Notebook not found'));
+    } else {
+      callback(null, doc);
+    }
+  });
 }
 
 module.exports.addNotebook = (newNotebook, userId, callback) => {
@@ -85,32 +93,4 @@ module.exports.removeNotebook = (id, callback) => {
 
 module.exports.removeByOwner = (userId, callback) => {
   Notebook.find({ owner: mongoose.Types.ObjectId(userId)}).remove(callback);
-}
-
-module.exports.canView = (id, userId, callback) => {
-  Notebook.findById(id, (err, doc) => {
-    if (err) {
-      callback(err);
-    } else if (!doc) {
-      callback(new Error('Document doesn\'t exist'));
-    } else if (doc.owner === userId || doc.editors.indexOf(userId) !== -1 || doc.viewers.indexOf(userId) !== -1) {
-      callback(null, true);
-    } else {
-      callback(null, false);
-    }
-  });
-}
-
-module.exports.canEdit = (id, userId, callback) => {
-  Notebook.findById(id, (err, doc) => {
-    if (err) {
-      callback(err);
-    } else if (!doc) {
-      callback(new Error('Document doesn\'t exist'));
-    } else if (doc.owner === userId || doc.editors.indexOf(userId) !== -1) {
-      callback(null, true)
-    } else {
-      callback(null, false);
-    }
-  });
 }

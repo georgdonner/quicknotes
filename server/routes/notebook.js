@@ -5,21 +5,18 @@ const auth = require('../auth/auth-middleware');
 const Notebook = require('../models/notebook');
 
 // Get one notebook
-router.get('/notebook/:notebook', auth.checkAuth, (req, res, next) => {
-  console.log('Test');
-  Notebook.canView(req.params.notebook, req.user._id, (err, canView) => {
+router.get('/notebook/:notebook', (req, res, next) => {
+  Notebook.getById(req.params.notebook, (err, notebook) => {
     if (err) {
-      res.status(500).send(err.message);
-    } else if (!canView) {
-      res.status(401).send(`You are not permitted to see this notebook.`)
-    } else {
-      Notebook.getById(req.params.notebook, (err, notebook) => {
-        if (err) {
-          res.status(400).send(err.message);
-        }
-        res.json(notebook);
-      });
+      return res.status(400).send(err.message);
     }
+    let authorized = false;
+    if (!req.user) {
+      notebook.publicVisible ? authorized = true : authorized = false;
+    } else {
+      canView(notebook, req.user._id) ? authorized = true : authorized = false;
+    }
+    return authorized ? res.json(notebook) : res.status(401).send('You are not authorized to see this notebook');
   });
 });
 
@@ -43,5 +40,13 @@ router.post('/notebook', auth.checkAuth, (req, res, next) => {
     res.json(notebook);
   });
 });
+
+function canView(doc, userId) {
+  if (doc.publicVisible || doc.owner === userId || doc.editors.indexOf(userId) !== -1 || doc.viewers.indexOf(userId) !== -1) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 module.exports = router;
