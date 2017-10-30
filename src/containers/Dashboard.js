@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import Header from '../components/Header.js';
 import './Dashboard.css';
 
@@ -14,18 +15,16 @@ class Dashboard extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidMount() {
-    fetch('/api/notebooks', {
-      credentials: 'same-origin'
-    }).then((res) => {
-      res.json().then((notebooks) => {
-        this.setState({
-          notebooks: notebooks
-        });
+  async componentDidMount() {
+    try {
+      const result = await axios.get('/api/notebooks', { withCredentials: true });
+      this.setState({
+        notebooks: result.data
       });
-    }).catch((err) => {
+    } catch (err) {
       console.error(err);
-    });
+    }
+    
   }
 
   search(input) {
@@ -36,27 +35,19 @@ class Dashboard extends Component {
     this.setState({name: event.target.value});
   }
   
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault();
     const body = {
       name: this.state.name
     }
-    fetch('/api/notebook', {
-      method: 'post',
-      headers: {
-        "Content-type": "application/json"
-      },
-      body: JSON.stringify(body),
-      credentials: 'same-origin'
-    })
-    .then(function (res) {
-      res.json().then((data) => {
-        console.log('Request succeeded with JSON response', data);
+    try {
+      const result = await axios.post('/api/notebook', body, {
+        withCredentials: true
       });
-    })
-    .catch(function (error) {
-      console.log('Request failed', error);
-    });
+      console.log('Notebook successfully created.', result.data);
+    } catch (err) {
+      console.error(err);
+    }
   }
             
   render() {
