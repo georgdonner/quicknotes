@@ -1,64 +1,71 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+
+const { Schema } = mongoose;
 
 const NoteSchema = new Schema({
   title: {
     type: String,
-    required: true
+    required: true,
   },
   body: {
     type: String,
-    default: ''
+    default: '',
   },
   folder: {
     type: String,
-    default: ''
+    default: '',
   },
   tmp: {
     type: Boolean,
-    default: false
+    default: false,
   },
   isStarred: {
     type: Boolean,
-    default: false
+    default: false,
   },
   autoDelete: Date,
   notebook: {
     type: Schema.Types.ObjectId,
-    ref: 'Notebook'
+    ref: 'Notebook',
   },
   owner: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
-  }
-},{
-  timestamps: true
+    ref: 'User',
+  },
+}, {
+  timestamps: true,
 });
-const Note = module.exports = mongoose.model('Note', NoteSchema);
+const Note = mongoose.model('Note', NoteSchema);
+module.exports = Note;
 
 module.exports.getAll = (notebookId, callback) => {
-  Note.find({ notebook: mongoose.Types.ObjectId(notebookId)}, callback);
-}
+  Note.find({ notebook: mongoose.Types.ObjectId(notebookId) }, callback);
+};
 
 module.exports.getById = (id, callback) => {
   Note.findById(id, callback);
-}
+};
 
 module.exports.addNote = (newNote, notebookId, userId, callback) => {
-  newNote.notebook = mongoose.Types.ObjectId(notebookId);
-  newNote.owner = mongoose.Types.ObjectId(userId);
-  newNote.save(callback);
-}
+  const note = new Note({
+    owner: mongoose.Types.ObjectId(userId),
+    notebook: mongoose.Types.ObjectId(notebookId),
+    ...newNote,
+  });
+  note.save(callback);
+};
 
 module.exports.updateNote = (id, newData, callback) => {
-  delete newData._id;
-  Note.findByIdAndUpdate(id, newData, { new: true }, callback);
-}
+  const {
+    _id, ...data
+  } = newData;
+  Note.findByIdAndUpdate(id, data, { new: true }, callback);
+};
 
 module.exports.remove = (id, callback) => {
   Note.findByIdAndRemove(id, callback);
-}
+};
 
 module.exports.removeByNotebook = (notebookId, callback) => {
-  Note.find({ notebook: mongoose.Types.ObjectId(notebookId)}).remove(callback);
-}
+  Note.find({ notebook: mongoose.Types.ObjectId(notebookId) }).remove(callback);
+};

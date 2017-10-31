@@ -7,11 +7,11 @@ import LoginPage from './containers/LoginPage';
 class AppRouter extends Component {
   state = {
     user: null,
-    authFinished: false
+    authFinished: false,
   }
 
   async componentDidMount() {
-    const result =  await axios.get('/api/user');
+    const result = await axios.get('/api/user');
     this.setState({ user: result.data, authFinished: true });
   }
 
@@ -21,24 +21,25 @@ class AppRouter extends Component {
     if (this.state.authFinished) {
       routes = (
         <div>
-          <Route exact path='/' render={() => (
+          <Route exact path="/"
+            render={() => (
             this.state.user ? (
-              <Dashboard user={this.state.user}/>
+              <Dashboard user={this.state.user} />
             ) : (
-              <Redirect to='/login'/>
-            )
-          )}/>
-          <Route exact path='/login' render={() => (
+              <Redirect to="/login" />
+            ))}
+          />
+          <Route exact path="/login" render={() => (
             !this.state.user ? (
-              <LoginPage/>
+              <LoginPage />
             ) : (
-              <Redirect to='/'/>
-            )
-          )}/>
+              <Redirect to="/" />
+            ))}
+          />
         </div>
       );
     }
-    return(
+    return (
       <Router>
         {routes}
       </Router>

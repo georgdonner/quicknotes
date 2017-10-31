@@ -4,15 +4,15 @@ import './Header.css';
 class Header extends Component {
   constructor(props) {
     super(props);
+    this.search = null;
     this.handleSearch = this.handleSearch.bind(this);
   }
 
   handleSearch(event) {
     event.preventDefault();
-    const searchValue = this.refs.search.value;
-    this.props.handleSearch(searchValue);
-    this.refs.search.value = '';
-    this.refs.search.blur();
+    this.props.handleSearch(this.search.value);
+    this.search.value = '';
+    this.search.blur();
   }
 
   render() {
@@ -25,9 +25,9 @@ class Header extends Component {
             </div>
             <div className="navbar-item">
               <form className="control has-icons-left" onSubmit={this.handleSearch}>
-                <input className="input" id="search-field" type="search" placeholder="Search" ref="search"/>
+                <input className="input" id="search-field" type="search" placeholder="Search" ref={(ref) => { this.search = ref; }} />
                 <span className="icon is-left">
-                  <i className="fa fa-search"></i>
+                  <i className="fa fa-search" />
                 </span>
               </form>
             </div>
@@ -36,7 +36,7 @@ class Header extends Component {
             <div className="navbar-item">
               <a className="button" id="new-note">
                 <span className="icon is-small">
-                  <i className="fa fa-plus"></i>
+                  <i className="fa fa-plus" />
                 </span>
                 <span>New</span>
               </a>

@@ -7,28 +7,29 @@ const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
 
 const mongoose = require('mongoose');
+
 mongoose.Promise = global.Promise;
 const User = require('./server/models/user');
 require('dotenv').config();
 
 passport.use(new GitHubStrategy({
-    clientID: process.env.GITHUB_CLIENT_ID,
-    clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: process.env.GITHUB_CALLBACK_URL,
-    scope: ['user:email']
-  },
-  (accessToken, refreshToken, profile, done) => {
-    User.findOrCreate({
-      username: profile.username,
-      email: profile.emails[0].value,
-      githubId: profile.id
-    }, (err, user) => {
-      if (err) {
-        return done(err);
-      }
-      return done(null, user);
-    });
-  }
+  clientID: process.env.GITHUB_CLIENT_ID,
+  clientSecret: process.env.GITHUB_CLIENT_SECRET,
+  callbackURL: process.env.GITHUB_CALLBACK_URL,
+  scope: ['user:email'],
+},
+(accessToken, refreshToken, profile, done) => {
+  User.findOrCreate({
+    username: profile.username,
+    email: profile.emails[0].value,
+    githubId: profile.id,
+  }, (err, user) => {
+    if (err) {
+      return done(err);
+    }
+    return done(null, user);
+  });
+},
 ));
 
 // passport configuration
@@ -47,18 +48,18 @@ const dbConnection = mongoose.connection;
 const app = express();
 
 // express middleware
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(session({
   name: 'quicknotes-session',
   secret: process.env.SESSION_SECRET,
-  maxAge: 24 * 60 * 60 * 1000 * 30 // one month
+  maxAge: 24 * 60 * 60 * 1000 * 30, // one month
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static(__dirname + '/build'));
+app.use(express.static(path.join(__dirname, '/build')));
 
-app.get('/api/auth', passport.authenticate('github', { scope: [ 'user:email' ] }));
+app.get('/api/auth', passport.authenticate('github', { scope: ['user:email'] }));
 
 app.get('/api/auth/callback',
   passport.authenticate('github', { failureRedirect: '/login' }),
@@ -68,7 +69,7 @@ app.get('/api/auth/callback',
     } else {
       res.redirect('http://127.0.0.1:3000');
     }
-  }
+  },
 );
 
 // redirect to React server in Development
@@ -95,10 +96,10 @@ const port = process.env.PORT || 8080;
 
 // start server after successful database connection
 dbConnection.on('connected', () => {
-  console.log('Connected to database');
+  console.log('Connected to database'); // eslint-disable-line no-console
   app.listen(port, () => {
-    console.log('Server started on port ' + port);
+    console.log(`Server started on port ${port}`); // eslint-disable-line no-console
   });
 });
 
-dbConnection.on('error', console.error.bind(console, 'connection error:'));
+dbConnection.on('error', console.error.bind(console, 'connection error:')); // eslint-disable-line no-console

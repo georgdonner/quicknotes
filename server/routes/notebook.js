@@ -1,11 +1,22 @@
 const express = require('express');
-const router = express.Router();
 const auth = require('../auth/auth-middleware');
+
+const router = express.Router();
 
 const Notebook = require('../models/notebook');
 
+function canView(doc, userId) {
+  if (doc.publicVisible ||
+    doc.owner === userId ||
+    doc.editors.indexOf(userId) !== -1 ||
+    doc.viewers.indexOf(userId) !== -1) {
+    return true;
+  }
+  return false;
+}
+
 // Get one notebook
-router.get('/notebook/:notebook', (req, res, next) => {
+router.get('/notebook/:notebook', (req, res) => {
   Notebook.getById(req.params.notebook, (err, notebook) => {
     if (err) {
       return res.status(400).send(err.message);
@@ -21,7 +32,7 @@ router.get('/notebook/:notebook', (req, res, next) => {
 });
 
 // Get all notebooks for one user
-router.get('/notebooks', auth.checkAuth, (req, res, next) => {
+router.get('/notebooks', auth.checkAuth, (req, res) => {
   Notebook.getByUser(req.user._id, (err, notebooks) => {
     if (err) {
       res.status(400).send(err.message);
@@ -31,22 +42,13 @@ router.get('/notebooks', auth.checkAuth, (req, res, next) => {
 });
 
 // Add a notebook
-router.post('/notebook', auth.checkAuth, (req, res, next) => {
-  const notebook = new Notebook(req.body);
-  Notebook.addNotebook(notebook, req.user._id, (err, notebook) => {
+router.post('/notebook', auth.checkAuth, (req, res) => {
+  Notebook.addNotebook(req.body, req.user._id, (err, created) => {
     if (err) {
       res.status(400).send(err.message);
     }
-    res.json(notebook);
+    res.json(created);
   });
 });
-
-function canView(doc, userId) {
-  if (doc.publicVisible || doc.owner === userId || doc.editors.indexOf(userId) !== -1 || doc.viewers.indexOf(userId) !== -1) {
-    return true;
-  } else {
-    return false;
-  }
-}
 
 module.exports = router;

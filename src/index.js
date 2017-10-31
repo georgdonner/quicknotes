@@ -5,5 +5,5 @@ import AppRouter from './appRouter';
 
 ReactDOM.render(
   <AppRouter />,
-  document.getElementById('root')
+  document.getElementById('root'),
 );

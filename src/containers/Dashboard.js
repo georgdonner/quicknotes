@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Header from '../components/Header.js';
+import Header from '../components/Header';
 import './Dashboard.css';
 
 class Dashboard extends Component {
@@ -8,7 +8,7 @@ class Dashboard extends Component {
     super(props);
     this.state = {
       name: '',
-      notebooks: []
+      notebooks: [],
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -19,12 +19,11 @@ class Dashboard extends Component {
     try {
       const result = await axios.get('/api/notebooks', { withCredentials: true });
       this.setState({
-        notebooks: result.data
+        notebooks: result.data,
       });
     } catch (err) {
       console.error(err);
     }
-    
   }
 
   search(input) {
@@ -32,39 +31,39 @@ class Dashboard extends Component {
   }
 
   handleChange(event) {
-    this.setState({name: event.target.value});
+    this.setState({ name: event.target.value });
   }
-  
+
   async handleSubmit(event) {
     event.preventDefault();
     const body = {
-      name: this.state.name
-    }
+      name: this.state.name,
+    };
     try {
       const result = await axios.post('/api/notebook', body, {
-        withCredentials: true
+        withCredentials: true,
       });
       console.log('Notebook successfully created.', result.data);
     } catch (err) {
       console.error(err);
     }
   }
-            
+
   render() {
-    const notebooks = this.state.notebooks.map((notebook) => 
-      <li key={notebook._id}>{notebook.name}</li>
+    const notebooks = this.state.notebooks.map(notebook =>
+      <li key={notebook._id}>{notebook.name}</li>,
     );
     return (
       <div>
         <Header
-          notebook='Quicknotes'
+          notebook="Quicknotes"
           handleSearch={this.search}
         />
         <div className="container">
           <div>User: {this.props.user.username}</div>
           <ul>{notebooks}</ul>
           <form onSubmit={this.handleSubmit}>
-            <label>
+            <label htmlFor="input">
               Name:
               <input type="text" value={this.state.value} onChange={this.handleChange} />
             </label>
