@@ -25,15 +25,15 @@ class Header extends Component {
   render() {
     let notebooksMenu = (
       <div className="notebook-menu nav-item">
-        <span className="icon is-medium menu-icon">
+        <span className="icon is-medium menu-icon" onClick={this.props.menuClicked}>
           <i className="fa fa-lg fa-bars" />
         </span>
-        <span className="is-hidden-touch" id="notebook">{this.props.notebook}</span>
+        <span className="is-hidden-mobile" id="notebook">{this.props.notebook}</span>
       </div>
     );
     let navIcons = (
       <Aux>
-        <div className="nav-icon is-hidden-desktop"
+        <div className="nav-icon is-hidden-tablet"
           onClick={() => {
             this.setState({ showSearch: true });
             this.search.focus();
@@ -71,8 +71,8 @@ class Header extends Component {
       );
     }
     return (
-      <nav className="main-nav">
-        <div className="is-flex container is-fluid" style={{ height: '36px' }}>
+      <nav id="main-nav">
+        <div className="is-flex container is-fluid" style={{ height: '36px', marginLeft: 0 }}>
           <div className="nav-start">
             {notebooksMenu}
             <form className={searchClasses} onSubmit={this.handleSearch}>
