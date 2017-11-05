@@ -1,0 +1,26 @@
+.login-page {
+  background: #002642;
+}
+
+#main-title {
+  color: white;;
+  margin-bottom: 2.5rem;
+}
+
+.login-form {
+  background: white;
+  max-width: 500px;
+  padding: 30px;
+  color: #001011;
+  margin: 0 auto;
+  border-radius: 5px;
+}
+
+.github-button {
+  background: #24292e;
+  color: white;
+}
+
+.github-button:hover {
+  color: white;
+}
