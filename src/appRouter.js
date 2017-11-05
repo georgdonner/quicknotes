@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import axios from 'axios';
+import Aux from './hoc/Auxiliary';
+import PrivateRoute from './components/PrivateRoute';
 import Dashboard from './containers/Dashboard';
 import LoginPage from './containers/LoginPage';
 
@@ -20,15 +22,8 @@ class AppRouter extends Component {
     let routes = <h1>Loading...</h1>; // TODO: loading spinner instead
     if (this.state.authFinished) {
       routes = (
-        <div>
-          <Route exact path="/"
-            render={() => (
-            this.state.user ? (
-              <Dashboard user={this.state.user} />
-            ) : (
-              <Redirect to="/login" />
-            ))}
-          />
+        <Aux>
+          <PrivateRoute exact path="/" user={this.state.user} component={Dashboard} />
           <Route exact path="/login" render={() => (
             !this.state.user ? (
               <LoginPage />
@@ -36,7 +31,7 @@ class AppRouter extends Component {
               <Redirect to="/" />
             ))}
           />
-        </div>
+        </Aux>
       );
     }
     return (
