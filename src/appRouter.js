@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import Aux from './hoc/Auxiliary';
 import PrivateRoute from './components/PrivateRoute';
-import Dashboard from './containers/Dashboard';
-import LoginPage from './containers/LoginPage';
+import Dashboard from './containers/Dashboard/Dashboard';
+import LoginPage from './containers/Login/LoginPage';
 
 class AppRouter extends Component {
   state = {

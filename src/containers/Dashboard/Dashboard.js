@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Header from '../components/Header';
+import Header from '../../components/Header';
 import './Dashboard.css';
 
 class Dashboard extends Component {
