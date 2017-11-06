@@ -14,7 +14,7 @@ class NotebookContainer extends Component {
     if (this.state.notebook === null ||
       (this.props.match.params.notebook !== this.state.notebook._id)) {
       try {
-        const result = await axios.get(`/api/notebook/${this.props.match.params.notebook}`, { withCredentials: true });
+        const result = await axios.get(`/api/notebook/${this.props.match.params.notebook}`);
         this.setState({
           notebook: result.data,
           error: null,
