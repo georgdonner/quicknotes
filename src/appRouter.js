@@ -23,7 +23,7 @@ class AppRouter extends Component {
     if (this.state.authFinished) {
       routes = (
         <Aux>
-          <PrivateRoute exact path="/" user={this.state.user} component={Dashboard} />
+          <PrivateRoute path="/" user={this.state.user} component={Dashboard} />
           <Route exact path="/login" render={() => (
             !this.state.user ? (
               <LoginPage />

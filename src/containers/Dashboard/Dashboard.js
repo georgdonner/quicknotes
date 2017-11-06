@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Header from '../../components/Header/Header';
 import Sidebar from '../../components/Sidebar/Sidebar';
+import DashboardRouter from './dashboardRouter';
 import './Dashboard.css';
 
 class Dashboard extends Component {
@@ -85,6 +86,7 @@ class Dashboard extends Component {
           open={this.state.menuOpen}
         />
         <div style={mainViewStyles}>
+          <DashboardRouter user={this.props.user} />
           <div>User: {this.props.user.username}</div>
           <ul>{notebooks}</ul>
           <form onSubmit={this.handleSubmit}>
