@@ -7,7 +7,7 @@ const Notebook = require('../models/notebook');
 
 function canView(doc, userId) {
   if (doc.publicVisible ||
-    doc.owner === userId ||
+    doc.owner.toString() === userId ||
     doc.editors.indexOf(userId) !== -1 ||
     doc.viewers.indexOf(userId) !== -1) {
     return true;
