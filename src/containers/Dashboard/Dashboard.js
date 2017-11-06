@@ -18,20 +18,19 @@ class Dashboard extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentWillMount() {
-    if (this.state.menuOpen === null) {
-      this.setState({ menuOpen: window.matchMedia('(min-width: 1200px)').matches });
-    }
-  }
-
-  async componentDidMount() {
-    try {
-      const result = await axios.get('/api/notebooks', { withCredentials: true });
-      this.setState({
-        notebooks: result.data,
-      });
-    } catch (err) {
-      console.error(err);
+  async componentWillMount() {
+    if (this.props.user) {
+      if (this.state.menuOpen === null) {
+        this.setState({ menuOpen: window.matchMedia('(min-width: 1200px)').matches });
+      }
+      try {
+        const result = await axios.get('/api/notebooks');
+        this.setState({
+          notebooks: result.data,
+        });
+      } catch (err) {
+        console.error(err);
+      }
     }
   }
 
@@ -54,9 +53,7 @@ class Dashboard extends Component {
       name: this.state.name,
     };
     try {
-      const result = await axios.post('/api/notebook', body, {
-        withCredentials: true,
-      });
+      const result = await axios.post('/api/notebook', body);
       console.log('Notebook successfully created.', result.data);
     } catch (err) {
       console.error(err);
@@ -64,15 +61,19 @@ class Dashboard extends Component {
   }
 
   render() {
-    const notebooks = this.state.notebooks.map(notebook =>
-      <li key={notebook._id}>{notebook.name}</li>,
-    );
     const mainViewStyles = {
       position: 'absolute',
       top: '60px',
       left: '240px',
       transition: 'left .1s linear',
     };
+    let sidebar;
+    if (this.props.user) {
+      sidebar = (<Sidebar
+        notebooks={this.state.notebooks}
+        open={this.state.menuOpen}
+      />);
+    }
     mainViewStyles.left = this.state.menuOpen ? '240px' : '0';
     return (
       <div style={{ position: 'relative' }}>
@@ -80,15 +81,11 @@ class Dashboard extends Component {
           notebook="Quicknotes"
           handleSearch={this.search}
           menuClicked={() => { this.toggleMenu(); }}
+          user={this.props.user}
         />
-        <Sidebar
-          notebooks={this.state.notebooks}
-          open={this.state.menuOpen}
-        />
+        {sidebar}
         <div style={mainViewStyles}>
           <DashboardRouter user={this.props.user} />
-          <div>User: {this.props.user.username}</div>
-          <ul>{notebooks}</ul>
           <form onSubmit={this.handleSubmit}>
             <label htmlFor="input">
               Name:

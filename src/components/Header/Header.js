@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import './Header.css';
 import Aux from '../../hoc/Auxiliary';
 
@@ -25,12 +26,28 @@ class Header extends Component {
   render() {
     let notebooksMenu = (
       <div className="notebook-menu nav-item">
-        <span className="icon is-medium menu-icon" onClick={this.props.menuClicked}>
-          <i className="fa fa-lg fa-bars" />
-        </span>
+        {this.props.user ? (
+          <span className="icon is-medium menu-icon" onClick={this.props.menuClicked}>
+            <i className="fa fa-lg fa-bars" />
+          </span>
+        ) : null}
         <span className="is-hidden-mobile" id="notebook">{this.props.notebook}</span>
       </div>
     );
+
+    let profileArea = this.props.user ? (
+      <div className="nav-icon" style={{ marginRight: '1rem' }}>
+        <span className="right-arrow" />
+        <span className="icon is-medium">
+          <i className="fa fa-2x fa-user-circle-o" />
+        </span>
+      </div>
+    ) : (
+      <div className="nav-icon">
+        <Link to="/login">Login</Link>
+      </div>
+    );
+
     let navIcons = (
       <Aux>
         <div className="nav-icon is-hidden-tablet"
@@ -49,12 +66,7 @@ class Header extends Component {
             <i className="fa fa-lg fa-plus" />
           </span>
         </div>
-        <div className="nav-icon" style={{ marginRight: '1rem' }}>
-          <span className="right-arrow" />
-          <span className="icon is-medium">
-            <i className="fa fa-2x fa-user-circle-o" />
-          </span>
-        </div>
+        {profileArea}
       </Aux>
     );
     let searchClasses = 'search-form nav-item control has-icons-left';

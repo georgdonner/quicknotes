@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import Aux from './hoc/Auxiliary';
-import PrivateRoute from './components/PrivateRoute';
 import Dashboard from './containers/Dashboard/Dashboard';
 import LoginPage from './containers/Login/LoginPage';
 
@@ -23,7 +22,6 @@ class AppRouter extends Component {
     if (this.state.authFinished) {
       routes = (
         <Aux>
-          <PrivateRoute path="/" user={this.state.user} component={Dashboard} />
           <Route exact path="/login" render={() => (
             !this.state.user ? (
               <LoginPage />
@@ -31,6 +29,7 @@ class AppRouter extends Component {
               <Redirect to="/" />
             ))}
           />
+          <Route path="/" render={() => <Dashboard user={this.state.user} />} />
         </Aux>
       );
     }

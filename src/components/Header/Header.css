@@ -84,6 +84,14 @@
   margin-left: 2.5rem;
 }
 
+.nav-icon a {
+  color: #333;
+}
+
+.nav-icon a:hover {
+  color: #020202;
+}
+
 .right-arrow::after:hover {
   border-color: #020202;
 }
