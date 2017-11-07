@@ -6,8 +6,11 @@ const NavIcon = (props) => {
   if (props.classes) classes += ` ${props.classes}`;
   return (
     <div
+      role="menuitem"
+      tabIndex="0"
       className={classes}
       onClick={props.clicked}
+      onKeyPress={props.clicked}
       style={props.style}
     >
       {props.dropdown ? <span className="right-arrow" /> : null}

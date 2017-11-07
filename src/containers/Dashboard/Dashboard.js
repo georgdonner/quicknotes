@@ -34,10 +34,6 @@ class Dashboard extends Component {
     }
   }
 
-  search(input) {
-    console.log(input);
-  }
-
   toggleMenu() {
     const open = !this.state.menuOpen;
     this.setState({ menuOpen: open });
@@ -79,7 +75,7 @@ class Dashboard extends Component {
       <div style={{ position: 'relative' }}>
         <Header
           notebook="Quicknotes"
-          handleSearch={this.search}
+          handleSearch={value => console.log(value)}
           menuClicked={() => { this.toggleMenu(); }}
           user={this.props.user}
         />
