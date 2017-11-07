@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Header.css';
 
 const NotebooksMenu = props => (
@@ -13,7 +14,9 @@ const NotebooksMenu = props => (
         <i className="fa fa-lg fa-bars" />
       </span>
     ) : null}
-    <span className="is-hidden-mobile" id="quicknotes">Quicknotes</span>
+    <Link to="/">
+      <span className="is-hidden-mobile" id="quicknotes">Quicknotes</span>
+    </Link>
   </div>
 );
 

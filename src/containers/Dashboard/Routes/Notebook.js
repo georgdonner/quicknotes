@@ -2,32 +2,37 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 class NotebookContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      notebook: null,
-      error: null,
-    };
+  state = {
+    notebook: null,
+    error: null,
+  };
+
+  componentDidMount() {
+    if (this.props.match.params.notebook) this.getNotebook(this.props.match.params.notebook);
   }
 
-  async componentWillReceiveProps() {
+  componentWillReceiveProps(nextProps) {
     if (this.state.notebook === null ||
-      (this.props.match.params.notebook !== this.state.notebook._id)) {
-      try {
-        const result = await axios.get(`/api/notebook/${this.props.match.params.notebook}`);
-        this.setState({
-          notebook: result.data,
-          error: null,
-        });
-      } catch (error) {
-        const errorMsg = error.response.status === 401
-          ? 'You don\'t have the permissions to view this notebook'
-          : 'Something went wrong :(';
-        this.setState({
-          notebook: null,
-          error: errorMsg,
-        });
-      }
+      (nextProps.match.params.notebook !== this.state.notebook._id)) {
+      this.getNotebook(nextProps.match.params.notebook);
+    }
+  }
+
+  async getNotebook(notebookId) {
+    try {
+      const result = await axios.get(`/api/notebook/${notebookId}`);
+      this.setState({
+        notebook: result.data,
+        error: null,
+      });
+    } catch (error) {
+      const errorMsg = error.response.status === 401
+        ? 'You don\'t have the permissions to view this notebook'
+        : 'Something went wrong :(';
+      this.setState({
+        notebook: null,
+        error: errorMsg,
+      });
     }
   }
 

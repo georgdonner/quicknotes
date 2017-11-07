@@ -81,14 +81,7 @@ class Dashboard extends Component {
         />
         {sidebar}
         <div style={mainViewStyles}>
-          <DashboardRouter user={this.props.user} />
-          <form onSubmit={this.handleSubmit}>
-            <label htmlFor="input">
-              Name:
-              <input type="text" value={this.state.value} onChange={this.handleChange} />
-            </label>
-            <input type="submit" value="Add Notebook" />
-          </form>
+          <DashboardRouter />
         </div>
       </div>
     );

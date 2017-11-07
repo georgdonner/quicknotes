@@ -1,10 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Sidebar.css';
 
 const Sidebar = (props) => {
-  const notebooks = props.notebooks.map(notebook =>
-    <li className="notebook" key={notebook._id}>{notebook.name}</li>,
-  );
+  const notebooks = props.notebooks.map(notebook => (
+    <Link to={`/notebook/${notebook._id}`} key={notebook._id}>
+      <li className="notebook">{notebook.name}</li>
+    </Link>
+  ));
   const sidebarPos = {
     left: 0,
   };
