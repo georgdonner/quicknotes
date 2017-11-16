@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import axios from 'axios';
 
 import Notebook from '../../../components/Notebook/Notebook';
@@ -23,8 +24,10 @@ class NotebookContainer extends Component {
   async getNotebook(notebookId) {
     try {
       const result = await axios.get(`/api/notebook/${notebookId}`);
+      const notebook = result.data;
+      this.props.updateNotebook(notebook);
       this.setState({
-        notebook: result.data,
+        notebook,
         error: null,
       });
     } catch (error) {
@@ -51,4 +54,11 @@ class NotebookContainer extends Component {
   }
 }
 
-export default NotebookContainer;
+const mapDispatchToProps = dispatch => ({
+  updateNotebook: notebook => dispatch({
+    type: 'NOTEBOOK_CHANGE',
+    notebook,
+  }),
+});
+
+export default connect(null, mapDispatchToProps)(NotebookContainer);

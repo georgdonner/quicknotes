@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import './Header.css';
+import { connect } from 'react-redux';
+
 import Aux from '../../hoc/Auxiliary';
 import NotebooksMenu from './NotebooksMenu';
 import NavIcon from './NavIcon';
 import Searchbar from './Searchbar';
+import './Header.css';
 
 class Header extends Component {
   constructor(props) {
@@ -36,6 +38,7 @@ class Header extends Component {
 
     let rightNav = (
       <Aux>
+        {this.props.notebook ? this.props.notebook.name : null}
         <NavIcon
           classes="is-hidden-tablet"
           clicked={() => this.setState({ showSearch: true })}
@@ -76,4 +79,8 @@ class Header extends Component {
   }
 }
 
-export default Header;
+const mapStateToProps = state => ({
+  notebook: state.notebook,
+});
+
+export default connect(mapStateToProps)(Header);
