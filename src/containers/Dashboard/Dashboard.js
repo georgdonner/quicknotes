@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import axios from 'axios';
+
 import Header from '../../components/Header/Header';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import DashboardRouter from './dashboardRouter';
@@ -18,11 +20,9 @@ class Dashboard extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  async componentWillMount() {
-    if (this.props.user) {
-      if (this.state.menuOpen === null) {
-        this.setState({ menuOpen: window.matchMedia('(min-width: 1200px)').matches });
-      }
+  async componentWillReceiveProps(nextProps) {
+    if (nextProps.user) {
+      this.setState({ menuOpen: window.matchMedia('(min-width: 1200px)').matches });
       try {
         const result = await axios.get('/api/notebooks');
         this.setState({
@@ -84,7 +84,6 @@ class Dashboard extends Component {
           notebook="Quicknotes"
           handleSearch={value => console.log(value)}
           menuClicked={() => this.toggleMenu()}
-          user={this.props.user}
         />
         {sidebar}
         <div style={mainViewStyles}>
@@ -95,4 +94,8 @@ class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+const mapStateToProps = state => ({
+  user: state.user,
+});
+
+export default connect(mapStateToProps)(Dashboard);

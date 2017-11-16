@@ -1,19 +1,26 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 import axios from 'axios';
+
 import Aux from './hoc/Auxiliary';
 import Dashboard from './containers/Dashboard/Dashboard';
 import LoginPage from './containers/Login/LoginPage';
 
 class AppRouter extends Component {
   state = {
-    user: null,
     authFinished: false,
+    noSession: false,
   }
 
   async componentDidMount() {
     const result = await axios.get('/api/user');
-    this.setState({ user: result.data, authFinished: true });
+    if (result.data) {
+      this.setState({ authFinished: true });
+      this.props.updateUser(result.data);
+    } else {
+      this.setState({ authFinished: true, noSession: true });
+    }
   }
 
   // TODO: Have static page with login and app description at '/' route
@@ -23,13 +30,13 @@ class AppRouter extends Component {
       routes = (
         <Aux>
           <Route exact path="/login" render={() => (
-            !this.state.user ? (
+            !this.state.noSession ? (
               <LoginPage />
             ) : (
               <Redirect to="/" />
             ))}
           />
-          <Route path="/" render={() => <Dashboard user={this.state.user} />} />
+          <Route path="/" component={Dashboard} />
         </Aux>
       );
     }
@@ -41,4 +48,12 @@ class AppRouter extends Component {
   }
 }
 
-export default AppRouter;
+const mapStateToProps = state => ({
+  user: state.user,
+});
+
+const mapDispatchToProps = dispatch => ({
+  updateUser: user => dispatch({ type: 'USER_CHANGE', user }),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppRouter);
