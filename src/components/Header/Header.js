@@ -67,7 +67,7 @@ class Header extends Component {
           <div className="nav-start">
             <NotebooksMenu
               showButton={this.props.user && !this.state.showSearch}
-              clicked={this.props.menuClicked}
+              clicked={this.props.toggleSidebar}
             />
             <Searchbar active={this.state.showSearch} handleSearch={this.handleSearch} />
           </div>
@@ -85,4 +85,8 @@ const mapStateToProps = state => ({
   user: state.user,
 });
 
-export default connect(mapStateToProps)(Header);
+const mapDispatchToProps = dispatch => ({
+  toggleSidebar: () => dispatch({ type: 'TOGGLE_SIDEBAR' }),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

@@ -18,6 +18,8 @@ class AppRouter extends Component {
     if (result.data) {
       this.setState({ authFinished: true });
       this.props.updateUser(result.data);
+      // check if window screen is big enough to display a sidebar (only if we have a user)
+      if (window.matchMedia('(min-width: 1200px)').matches) this.props.toggleSidebar();
     } else {
       this.setState({ authFinished: true, noSession: true });
     }
@@ -54,6 +56,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   updateUser: user => dispatch({ type: 'USER_CHANGE', user }),
+  toggleSidebar: () => dispatch({ type: 'TOGGLE_SIDEBAR' }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppRouter);

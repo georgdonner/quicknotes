@@ -13,7 +13,6 @@ class Dashboard extends Component {
     this.state = {
       name: '',
       notebooks: [],
-      menuOpen: null,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -22,7 +21,6 @@ class Dashboard extends Component {
 
   async componentWillReceiveProps(nextProps) {
     if (nextProps.user) {
-      this.setState({ menuOpen: window.matchMedia('(min-width: 1200px)').matches });
       try {
         const result = await axios.get('/api/notebooks');
         this.setState({
@@ -69,10 +67,10 @@ class Dashboard extends Component {
     if (this.props.user) {
       sidebar = (<Sidebar
         notebooks={this.state.notebooks}
-        open={this.state.menuOpen}
+        open={this.props.sidebar}
       />);
     }
-    mainViewStyles.left = this.state.menuOpen ? '240px' : '0px';
+    mainViewStyles.left = this.props.sidebar ? '240px' : '0px';
 
     if (window.matchMedia('(min-width: 768px)').matches) {
       mainViewStyles.width = `calc(100vw - ${mainViewStyles.left})`;
@@ -96,6 +94,7 @@ class Dashboard extends Component {
 
 const mapStateToProps = state => ({
   user: state.user,
+  sidebar: state.sidebar,
 });
 
 export default connect(mapStateToProps)(Dashboard);

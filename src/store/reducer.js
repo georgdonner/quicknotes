@@ -1,6 +1,7 @@
 const initialState = {
   notebook: null,
   user: null,
+  sidebar: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -14,6 +15,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         user: action.user,
+      };
+    case 'TOGGLE_SIDEBAR':
+      return {
+        ...state,
+        sidebar: !state.sidebar,
       };
     default:
       return state;
