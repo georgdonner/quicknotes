@@ -14,14 +14,21 @@ class AppRouter extends Component {
   }
 
   async componentDidMount() {
-    const result = await axios.get('/api/user');
-    if (result.data) {
-      this.setState({ authFinished: true });
-      this.props.updateUser(result.data);
-      // check if window screen is big enough to display a sidebar (only if we have a user)
-      if (window.matchMedia('(min-width: 1200px)').matches) this.props.toggleSidebar();
-    } else {
-      this.setState({ authFinished: true, noSession: true });
+    try {
+      const userResponse = await axios.get('/api/user');
+      if (userResponse.data) {
+        this.setState({ authFinished: true });
+        this.props.updateUser(userResponse.data);
+        // check if window screen is big enough to display a sidebar (only if we have a user)
+        if (window.matchMedia('(min-width: 1200px)').matches) this.props.toggleSidebar();
+        // fetch user's notebooks
+        const notebooksResponse = await axios.get('/api/notebooks');
+        this.props.updateNotebooks(notebooksResponse.data);
+      } else {
+        this.setState({ authFinished: true, noSession: true });
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -55,6 +62,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  updateNotebooks: notebooks => dispatch({ type: 'UPDATE_NOTEBOOKS', notebooks }),
   updateUser: user => dispatch({ type: 'USER_CHANGE', user }),
   toggleSidebar: () => dispatch({ type: 'TOGGLE_SIDEBAR' }),
 });

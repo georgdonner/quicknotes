@@ -12,29 +12,10 @@ class Dashboard extends Component {
     super(props);
     this.state = {
       name: '',
-      notebooks: [],
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  async componentWillReceiveProps(nextProps) {
-    if (nextProps.user) {
-      try {
-        const result = await axios.get('/api/notebooks');
-        this.setState({
-          notebooks: result.data,
-        });
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  }
-
-  toggleMenu() {
-    const open = !this.state.menuOpen;
-    this.setState({ menuOpen: open });
   }
 
   handleChange(event) {
@@ -66,7 +47,7 @@ class Dashboard extends Component {
     let sidebar;
     if (this.props.user) {
       sidebar = (<Sidebar
-        notebooks={this.state.notebooks}
+        notebooks={this.props.notebooks}
         open={this.props.sidebar}
       />);
     }
@@ -81,7 +62,6 @@ class Dashboard extends Component {
         <Header
           notebook="Quicknotes"
           handleSearch={value => console.log(value)}
-          menuClicked={() => this.toggleMenu()}
         />
         {sidebar}
         <div style={mainViewStyles}>
@@ -93,8 +73,9 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.user,
+  notebooks: state.notebooks,
   sidebar: state.sidebar,
+  user: state.user,
 });
 
 export default connect(mapStateToProps)(Dashboard);
