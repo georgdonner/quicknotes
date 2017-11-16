@@ -62,6 +62,8 @@ class Dashboard extends Component {
       top: '60px',
       left: '240px',
       transition: 'left .1s linear',
+      width: '100%',
+      height: 'calc(100vh - 60px)',
     };
     let sidebar;
     if (this.props.user) {
@@ -70,13 +72,18 @@ class Dashboard extends Component {
         open={this.state.menuOpen}
       />);
     }
-    mainViewStyles.left = this.state.menuOpen ? '240px' : '0';
+    mainViewStyles.left = this.state.menuOpen ? '240px' : '0px';
+
+    if (window.matchMedia('(min-width: 768px)').matches) {
+      mainViewStyles.width = `calc(100vw - ${mainViewStyles.left})`;
+    }
+
     return (
       <div style={{ position: 'relative' }}>
         <Header
           notebook="Quicknotes"
           handleSearch={value => console.log(value)}
-          menuClicked={() => { this.toggleMenu(); }}
+          menuClicked={() => this.toggleMenu()}
           user={this.props.user}
         />
         {sidebar}

@@ -1,0 +1,24 @@
+#notebook-topbar {
+  display: flex;
+  justify-content: center;
+}
+
+#notebook-title {
+  min-width: 250px;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 0.75rem 2rem;
+  text-align: center;
+  font-size: 1.1rem;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+  box-shadow: 0px 2px 4px #ddd;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+@media only screen and (max-width: 767px) {
+  #notebook-title {
+    max-width: 80%;
+  }
+}

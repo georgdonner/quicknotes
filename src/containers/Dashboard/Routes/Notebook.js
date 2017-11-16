@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+import Notebook from '../../../components/Notebook/Notebook';
+
 class NotebookContainer extends Component {
   state = {
     notebook: null,
@@ -43,7 +45,7 @@ class NotebookContainer extends Component {
     } else if (this.state.error) {
       notebook = <h1>{this.state.error}</h1>;
     } else {
-      notebook = <h1>{this.state.notebook.name}</h1>;
+      notebook = <Notebook notebook={this.state.notebook} />;
     }
     return notebook;
   }
