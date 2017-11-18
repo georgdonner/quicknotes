@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import axios from 'axios';
 
 import './index.css';
-import AppRouter from './appRouter';
+import App from './App';
 import reducer from './store/reducer';
 
 axios.defaults.withCredentials = true;
@@ -13,6 +13,6 @@ axios.defaults.withCredentials = true;
 const store = createStore(reducer);
 
 ReactDOM.render(
-  <Provider store={store}><AppRouter /></Provider>,
+  <Provider store={store}><App /></Provider>,
   document.getElementById('root'),
 );
