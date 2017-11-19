@@ -54,7 +54,7 @@ class Dashboard extends Component {
     mainViewStyles.left = this.props.sidebar ? '240px' : '0px';
 
     if (window.matchMedia('(min-width: 768px)').matches) {
-      mainViewStyles.width = `calc(100vw - ${mainViewStyles.left})`;
+      mainViewStyles.width = `calc(100% - ${mainViewStyles.left})`;
     }
 
     return (
