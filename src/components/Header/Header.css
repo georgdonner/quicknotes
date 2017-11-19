@@ -94,5 +94,12 @@
 
 .dropdown-item {
   font-size: 1rem;
-  line-height: 2.5;
+}
+
+.dropdown-item:hover {
+  background: #f9f9f9;
+}
+
+.dropdown-item a {
+  color: inherit;
 }

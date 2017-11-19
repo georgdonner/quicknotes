@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import NavIcon from './common/NavIcon';
 
@@ -10,8 +11,10 @@ const PlusButton = () => (
     <div className="dropdown-menu" role="menu">
       <div className="dropdown-content">
         <div className="dropdown-item">
-          <p>New Note</p>
-          <p>New Notebook</p>
+          <Link to="/new/note">New Note</Link>
+        </div>
+        <div className="dropdown-item">
+          <Link to="/new/notebook">New Notebook</Link>
         </div>
       </div>
     </div>
