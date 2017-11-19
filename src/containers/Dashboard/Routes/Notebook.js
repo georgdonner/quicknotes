@@ -8,6 +8,7 @@ class NotebookContainer extends Component {
   state = {
     notebook: null,
     error: null,
+    firstRequestOut: false,
   };
 
   componentDidMount() {
@@ -15,14 +16,15 @@ class NotebookContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.notebook === null ||
-      (nextProps.match.params.notebook !== this.state.notebook._id)) {
+    if ((this.state.notebook === null && !this.state.firstRequestOut) ||
+      (this.state.notebook && nextProps.match.params.notebook !== this.state.notebook._id)) {
       this.getNotebook(nextProps.match.params.notebook);
     }
   }
 
   async getNotebook(notebookId) {
     try {
+      this.setState({ firstRequestOut: true });
       const result = await axios.get(`/api/notebook/${notebookId}`);
       const notebook = result.data;
       this.props.updateNotebook(notebook);
