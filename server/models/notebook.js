@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const Note = require('./note');
+
 const { Schema } = mongoose;
 
 const NotebookSchema = new Schema({
@@ -52,7 +54,14 @@ module.exports.getById = (id, callback) => {
     } else if (!doc) {
       callback(new Error('Notebook not found'));
     } else {
-      callback(null, doc);
+      Note.getAll(id, (notesErr, docs) => {
+        if (err) {
+          callback(err);
+        } else {
+          const notebook = { ...doc._doc, notes: docs.slice() };
+          callback(null, notebook);
+        }
+      });
     }
   });
 };

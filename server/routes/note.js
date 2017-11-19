@@ -26,8 +26,6 @@ router.get('/note/:note', (req, res) => {
 
 // Post a note
 router.post('/notebook/:notebook/new', (req, res) => {
-  console.log(req.user);
-  console.log(req.body);
   if (req.user) {
     Note.addNote(req.body, req.params.notebook, req.user._id, (err, created) => {
       if (err) {
