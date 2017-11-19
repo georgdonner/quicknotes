@@ -1,20 +1,27 @@
 import React, { Component } from 'react';
+import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
 import NewNote from '../../../components/NewNote/NewNote';
 
 class NewNoteHandler extends Component {
+  constructor(props) {
+    super(props);
+
+    this.addNote = this.addNote.bind(this);
+  }
+
   async addNote(note) {
     try {
       const body = {
         title: note.title,
         body: note.body,
       };
-      const result = await axios.post(`/api/notebook/${note.notebook}/new`, body);
-      console.log('Notebook successfully created.', result.data);
+      await axios.post(`/api/notebook/${note.notebook}/new`, body);
+      this.props.history.push(`/notebook/${note.notebook}`);
     } catch (err) {
-      console.error(err);
+      toast(err, { type: 'error', position: 'bottom-right' });
     }
   }
 
