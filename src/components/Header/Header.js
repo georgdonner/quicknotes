@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 
 import Aux from '../../hoc/Auxiliary';
 import NotebooksMenu from './NotebooksMenu';
-import NavIcon from './NavIcon';
 import Searchbar from './Searchbar';
+import PlusButton from './PlusButton';
+import NavIcon from './common/NavIcon';
 import './Header.css';
 
 class Header extends Component {
@@ -27,7 +28,6 @@ class Header extends Component {
   render() {
     const profileArea = this.props.user ? (
       <NavIcon dropdown
-        style={{ marginRight: '1rem' }}
         padding="medium" size="2x" icon="user-circle-o"
       />
     ) : (
@@ -45,9 +45,7 @@ class Header extends Component {
           clicked={() => this.setState({ showSearch: true })}
           padding="small" size="lg" icon="search"
         />
-        <NavIcon dropdown
-          padding="small" size="lg" icon="plus"
-        />
+        <PlusButton />
         {profileArea}
       </Aux>
     );

@@ -81,7 +81,7 @@
 
 .nav-icon {
   position: relative;
-  margin-left: 2.5rem;
+  margin-left: 1rem;
 }
 
 .nav-icon a {
@@ -92,22 +92,7 @@
   color: #020202;
 }
 
-.right-arrow::after:hover {
-  border-color: #020202;
-}
-
-.right-arrow::after {
-  border: 1px solid #333;
-  border-right: 0;
-  border-top: 0;
-  content: " ";
-  display: block;
-  height: .5em;
-  cursor: pointer;
-  position: absolute;
-  transform: rotate(-45deg);
-  width: .5em;
-  margin-top: -.375em;
-  right: -1.1em;
-  top: 45%;
+.dropdown-item {
+  font-size: 1rem;
+  line-height: 2.5;
 }
