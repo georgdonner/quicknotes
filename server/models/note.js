@@ -11,15 +11,7 @@ const NoteSchema = new Schema({
     type: String,
     default: '',
   },
-  folder: {
-    type: String,
-    default: '',
-  },
   tmp: {
-    type: Boolean,
-    default: false,
-  },
-  isStarred: {
     type: Boolean,
     default: false,
   },

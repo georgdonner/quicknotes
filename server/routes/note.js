@@ -26,13 +26,18 @@ router.get('/note/:note', (req, res) => {
 
 // Post a note
 router.post('/notebook/:notebook/new', (req, res) => {
-  // TODO add user logic
-  Note.addNote(req.body, req.params.notebook, '59eb26b2d9a25241b4b5234e', (err, created) => {
-    if (err) {
-      res.status(400).send(err.message);
-    }
-    res.json(created);
-  });
+  console.log(req.user);
+  console.log(req.body);
+  if (req.user) {
+    Note.addNote(req.body, req.params.notebook, req.user._id, (err, created) => {
+      if (err) {
+        return res.status(400).send(err.message);
+      }
+      return res.json(created);
+    });
+  } else {
+    return res.sendStatus(401);
+  }
 });
 
 // Update a note
