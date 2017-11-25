@@ -1,0 +1,35 @@
+.CodeMirror {
+  color: #333 !important;
+  font-size: .8rem;
+}
+
+.CodeMirror-gutters {
+  border: none;
+  background: white;
+}
+
+.CodeMirror-line {
+  padding-left: .8rem !important;
+}
+
+.editor-field {
+  border: #d9d9d9 1px solid;
+  flex-grow: 1;
+}
+
+.editor-field .control, .editor-field .CodeMirror, .editor-field .editor {
+  height: 100%;
+}
+
+.button-group {
+  padding-bottom: 1rem;
+}
+
+#newnote {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0 .5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}

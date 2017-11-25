@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Textarea from 'react-textarea-autosize';
+import { Controlled as CodeMirror } from 'react-codemirror2';
+import 'codemirror/lib/codemirror.css';
 import './NewNote.css';
+
+require('codemirror/mode/markdown/markdown');
 
 class NewNote extends Component {
   constructor(props) {
@@ -37,43 +40,54 @@ class NewNote extends Component {
     ));
 
     return (
-      <div className="container is-fluid">
+      <div className="container is-fluid" id="newnote">
         <div style={{ marginBottom: '2rem' }} id="notebook-topbar">
           <h1 id="notebook-title">Create a new note</h1>
         </div>
-        <div className="field">
-          <label className="label" htmlFor="title">Title</label>
-          <div className="control">
-            <input
-              className="input" name="title" id="text"
-              value={this.state.title} onChange={this.titleChange}
-            />
-          </div>
-        </div>
-        <div className="field">
-          <label className="label">Notebook</label>
-          <div className="control">
-            <div className="select">
-              <select
-                value={this.state.notebookId}
-                onChange={this.notebookChange}
-              >
-                {notebooks}
-              </select>
+        <div className="field is-horizontal">
+          <div className="field-body">
+            <div className="field">
+              <div className="control is-expanded">
+                <input
+                  className="input" name="title" id="text" placeholder="Title"
+                  value={this.state.title} onChange={this.titleChange}
+                />
+              </div>
+            </div>
+            <div className="field">
+              <div className="control is-expanded has-icons-left">
+                <div className="select" style={{ float: 'right' }}>
+                  <select
+                    value={this.state.notebookId}
+                    onChange={this.notebookChange}
+                  >
+                    {notebooks}
+                  </select>
+                  <span className="icon is-small is-left">
+                    <i className="fa fa-book" />
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div className="field">
+        <div className="field editor-field">
           <div className="control">
-            <Textarea
-              className="textarea"
-              placeholder="Styling with Markdown is supported"
+            <CodeMirror
               value={this.state.body}
-              onChange={this.bodyChange}
+              className="editor"
+              options={{
+                mode: 'markdown',
+                lineNumbers: true,
+                lineWrapping: true,
+              }}
+              onBeforeChange={(editor, data, value) => {
+                this.setState({ body: value });
+              }}
             />
           </div>
         </div>
-        <div className="field is-grouped">
+        <div className="field is-grouped button-group">
           <div className="control">
             <button
               className="button is-link"
@@ -87,7 +101,7 @@ class NewNote extends Component {
             </button>
           </div>
           <div className="control">
-            <button className="button"><Link to="/">Cancel</Link></button>
+            <Link to="/" replace><button className="button">Cancel</button></Link>
           </div>
         </div>
       </div>
