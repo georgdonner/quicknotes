@@ -38,6 +38,10 @@
   cursor: pointer;
 }
 
+#sidebar .notebook.active {
+  background: #f2f2f2;
+}
+
 #sidebar .notebook:hover {
   background: #f2f2f2;
 }

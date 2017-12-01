@@ -3,11 +3,17 @@ import { Link } from 'react-router-dom';
 import './Sidebar.css';
 
 const Sidebar = (props) => {
-  const notebooks = props.notebooks.map(notebook => (
-    <Link to={`/notebook/${notebook._id}`} key={notebook._id}>
-      <li className="notebook">{notebook.name}</li>
-    </Link>
-  ));
+  const notebooks = props.notebooks.map((notebook) => {
+    let classes = 'notebook';
+    if (props.activeNotebook && props.activeNotebook._id === notebook._id) {
+      classes += ' active';
+    }
+    return (
+      <Link to={`/notebook/${notebook._id}`} key={notebook._id}>
+        <li className={classes}>{notebook.name}</li>
+      </Link>
+    );
+  });
   const sidebarPos = {
     left: 0,
   };
