@@ -31,11 +31,11 @@ const Note = mongoose.model('Note', NoteSchema);
 module.exports = Note;
 
 module.exports.getAll = (notebookId, callback) => {
-  Note.find({ notebook: mongoose.Types.ObjectId(notebookId) }, callback);
+  Note.find({ notebook: mongoose.Types.ObjectId(notebookId) }).populate('owner', 'username').exec(callback);
 };
 
 module.exports.getById = (id, callback) => {
-  Note.findById(id, callback);
+  Note.findById(id).populate('owner', 'username').exec(callback);
 };
 
 module.exports.addNote = (newNote, notebookId, userId, callback) => {

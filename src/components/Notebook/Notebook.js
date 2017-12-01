@@ -3,6 +3,7 @@ import Aux from '../../hoc/Auxiliary';
 import './Notebook.css';
 
 const Notebook = (props) => {
+  console.log(props.notebook.notes);
   const notes = props.notebook.notes.map(note => (
     <h2 key={note._id}>{note.title}</h2>
   ));
