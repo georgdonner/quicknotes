@@ -21,9 +21,11 @@ class NewNoteHandler extends Component {
   }
 
   render() {
+    let error;
     let preSelected;
     if (this.props.notebook) preSelected = this.props.notebook._id;
-    if (!preSelected && this.props.notebooks.length > 0) preSelected = this.props.notebooks[0]._id;
+    else if (this.props.notebooks.length > 0) preSelected = this.props.notebooks[0]._id;
+    else error = 'You have to create or join a notebook before creating notes!';
 
     return preSelected ? (
       <NoteForm
@@ -31,7 +33,7 @@ class NewNoteHandler extends Component {
         selected={preSelected}
         onAdd={this.addNote}
       />
-    ) : <h1>Loading...</h1>;
+    ) : <h1>{error || 'Loading...'}</h1>;
   }
 }
 
