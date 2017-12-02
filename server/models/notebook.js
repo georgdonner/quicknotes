@@ -37,73 +37,78 @@ const NotebookSchema = new Schema({
 const Notebook = mongoose.model('Notebook', NotebookSchema);
 module.exports = Notebook;
 
-module.exports.getByUser = (id, callback) => {
-  Notebook.find({
-    $or: [
-      { owner: mongoose.Types.ObjectId(id) },
-      { editors: mongoose.Types.ObjectId(id) },
-      { viewers: mongoose.Types.ObjectId(id) },
-    ],
-  }, callback);
+module.exports.getByUser = async (id) => {
+  try {
+    const notebooks = await Notebook.find({
+      $or: [
+        { owner: mongoose.Types.ObjectId(id) },
+        { editors: mongoose.Types.ObjectId(id) },
+        { viewers: mongoose.Types.ObjectId(id) },
+      ],
+    });
+    const populateAll = [];
+    notebooks.forEach((notebook) => {
+      populateAll.push(Note.getAll(notebook._id));
+    });
+    const allNotes = await Promise.all(populateAll);
+    const populated = [];
+    notebooks.forEach((notebook, index) => {
+      populated.push({ ...notebook._doc, notes: allNotes[index].slice() });
+    });
+    return populated;
+  } catch (error) {
+    return error;
+  }
 };
 
-module.exports.getById = (id, callback) => {
-  Notebook.findById(id, (err, doc) => {
-    if (err) {
-      callback(err);
-    } else if (!doc) {
-      callback(new Error('Notebook not found'));
-    } else {
-      Note.getAll(id, (notesErr, docs) => {
-        if (err) {
-          callback(err);
-        } else {
-          const notebook = { ...doc._doc, notes: docs.slice() };
-          callback(null, notebook);
-        }
-      });
-    }
-  });
+module.exports.getById = async (id) => {
+  try {
+    const notebook = await Notebook.findById(id);
+    const notes = await Note.getAll(id);
+    return { ...notebook._doc, notes };
+  } catch (error) {
+    return error;
+  }
 };
 
-module.exports.addNotebook = (newNotebook, userId, callback) => {
+module.exports.addNotebook = (newNotebook, userId) => {
   const notebook = new Notebook(
     { owner: mongoose.Types.ObjectId(userId), ...newNotebook },
   );
-  notebook.save(callback);
+  return notebook.save();
 };
 
-module.exports.updateNotebook = (id, newData, callback) => {
+module.exports.updateNotebook = (id, newData) => {
   const {
     _id, owner, viewers, editors, ...data
   } = newData;
-  Notebook.findByIdAndUpdate(id, { $set: data }, callback);
+  return Notebook.findByIdAndUpdate(id, { $set: data });
 };
 
-module.exports.addViewer = (id, userId, callback) => {
-  Notebook.findByIdAndUpdate(id, { $push: { viewers: mongoose.Types.ObjectId(userId) } }, callback);
-};
+module.exports.addViewer = (id, userId) => (
+  Notebook.findByIdAndUpdate(id, { $push: { viewers: mongoose.Types.ObjectId(userId) } })
+);
 
-module.exports.removeViewer = (id, userId, callback) => {
-  Notebook.findByIdAndUpdate(id, { $pull: { viewers: mongoose.Types.ObjectId(userId) } }, callback);
-};
+module.exports.removeViewer = (id, userId) => (
+  Notebook.findByIdAndUpdate(id, { $pull: { viewers: mongoose.Types.ObjectId(userId) } })
+);
 
-module.exports.addEditor = (id, userId, callback) => {
-  Notebook.findByIdAndUpdate(id, { $push: { editors: mongoose.Types.ObjectId(userId) } }, callback);
-};
+module.exports.addEditor = (id, userId) => (
+  Notebook.findByIdAndUpdate(id, { $push: { editors: mongoose.Types.ObjectId(userId) } })
+);
 
-module.exports.removeEditor = (id, userId, callback) => {
-  Notebook.findByIdAndUpdate(id, { $pull: { editors: mongoose.Types.ObjectId(userId) } }, callback);
-};
+module.exports.removeEditor = (id, userId) => (
+  Notebook.findByIdAndUpdate(id, { $pull: { editors: mongoose.Types.ObjectId(userId) } })
+);
 
-module.exports.updateOwner = (id, userId, callback) => {
-  Notebook.findByIdAndUpdate(id, { $set: { owner: mongoose.Types.ObjectId(userId) } }, callback);
-};
+module.exports.updateOwner = (id, userId) => (
+  Notebook.findByIdAndUpdate(id, { $set: { owner: mongoose.Types.ObjectId(userId) } })
+);
 
-module.exports.removeNotebook = (id, callback) => {
-  Notebook.findByIdAndRemove(id, callback);
-};
+module.exports.removeNotebook = id => (
+  Notebook.findByIdAndRemove(id)
+);
 
-module.exports.removeByOwner = (userId, callback) => {
-  Notebook.find({ owner: mongoose.Types.ObjectId(userId) }).remove(callback);
-};
+module.exports.removeByOwner = userId => (
+  Notebook.find({ owner: mongoose.Types.ObjectId(userId) }).remove()
+);

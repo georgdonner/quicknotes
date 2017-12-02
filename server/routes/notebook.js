@@ -16,39 +16,35 @@ function canView(doc, userId) {
 }
 
 // Get one notebook
-router.get('/notebook/:notebook', (req, res) => {
-  Notebook.getById(req.params.notebook, (err, notebook) => {
-    if (err) {
-      return res.status(400).send(err.message);
-    }
-    let authorized = false;
-    if (!req.user) {
-      notebook.publicVisible ? authorized = true : authorized = false;
-    } else {
-      canView(notebook, req.user._id) ? authorized = true : authorized = false;
-    }
+router.get('/notebook/:notebook', async (req, res) => {
+  try {
+    console.log(req.params);
+    const notebook = await Notebook.getById(req.params.notebook);
+    const authorized = req.user ? canView(notebook, req.user._id) : notebook.publicVisible;
     return authorized ? res.json(notebook) : res.status(401).send('You are not authorized to see this notebook');
-  });
+  } catch (error) {
+    return res.status(400).send(error.message);
+  }
 });
 
 // Get all notebooks for one user
-router.get('/notebooks', auth.checkAuth, (req, res) => {
-  Notebook.getByUser(req.user._id, (err, notebooks) => {
-    if (err) {
-      res.status(400).send(err.message);
-    }
-    res.json(notebooks);
-  });
+router.get('/notebooks', auth.checkAuth, async (req, res) => {
+  try {
+    const notebooks = await Notebook.getByUser(req.user._id);
+    return res.json(notebooks);
+  } catch (error) {
+    return res.status(400).send(error.message);
+  }
 });
 
 // Add a notebook
-router.post('/notebook', auth.checkAuth, (req, res) => {
-  Notebook.addNotebook(req.body, req.user._id, (err, created) => {
-    if (err) {
-      res.status(400).send(err.message);
-    }
-    res.json(created);
-  });
+router.post('/notebook', auth.checkAuth, async (req, res) => {
+  try {
+    const created = await Notebook.addNotebook(req.body, req.user._id);
+    return res.json(created);
+  } catch (error) {
+    return res.status(400).send(error.message);
+  }
 });
 
 module.exports = router;

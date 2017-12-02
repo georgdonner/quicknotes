@@ -22,28 +22,25 @@ const UserSchema = new Schema({
 const User = mongoose.model('User', UserSchema);
 module.exports = User;
 
-module.exports.getById = (id, callback) => {
-  User.findById(id, callback);
+module.exports.getById = id => (
+  User.findById(id)
+);
+
+module.exports.findOrCreate = async (data) => {
+  try {
+    const userData = new User(data);
+    const user = await User.findOne({ email: userData.email });
+    return user || userData.save();
+  } catch (error) {
+    return error;
+  }
 };
 
-module.exports.findOrCreate = (data, callback) => {
-  const userData = new User(data);
-  User.findOne({ email: userData.email }, (err, user) => {
-    if (err) {
-      callback(err);
-    } else if (user) {
-      callback(null, user);
-    } else {
-      userData.save(callback);
-    }
-  });
-};
-
-module.exports.updateUser = (id, newData, callback) => {
+module.exports.updateUser = (id, newData) => {
   const { _id, ...data } = newData;
-  User.findByIdAndUpdate(id, { $set: data }, callback);
+  return User.findByIdAndUpdate(id, { $set: data });
 };
 
-module.exports.removeUser = (id, callback) => {
-  User.findByIdAndRemove(id, callback);
-};
+module.exports.removeUser = id => (
+  User.findByIdAndRemove(id)
+);

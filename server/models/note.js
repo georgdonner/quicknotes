@@ -30,34 +30,34 @@ const NoteSchema = new Schema({
 const Note = mongoose.model('Note', NoteSchema);
 module.exports = Note;
 
-module.exports.getAll = (notebookId, callback) => {
-  Note.find({ notebook: mongoose.Types.ObjectId(notebookId) }).populate('owner', 'username').exec(callback);
-};
+module.exports.getAll = notebookId => (
+  Note.find({ notebook: mongoose.Types.ObjectId(notebookId) }).populate('owner', 'username').exec()
+);
 
-module.exports.getById = (id, callback) => {
-  Note.findById(id).populate('owner', 'username').exec(callback);
-};
+module.exports.getById = id => (
+  Note.findById(id).populate('owner', 'username').exec()
+);
 
-module.exports.addNote = (newNote, notebookId, userId, callback) => {
+module.exports.addNote = (newNote, notebookId, userId) => {
   const note = new Note({
     owner: mongoose.Types.ObjectId(userId),
     notebook: mongoose.Types.ObjectId(notebookId),
     ...newNote,
   });
-  note.save(callback);
+  return note.save();
 };
 
-module.exports.updateNote = (id, newData, callback) => {
+module.exports.updateNote = (id, newData) => {
   const {
     _id, ...data
   } = newData;
-  Note.findByIdAndUpdate(id, data, { new: true }, callback);
+  return Note.findByIdAndUpdate(id, data, { new: true });
 };
 
-module.exports.remove = (id, callback) => {
-  Note.findByIdAndRemove(id, callback);
-};
+module.exports.remove = id => (
+  Note.findByIdAndRemove(id)
+);
 
-module.exports.removeByNotebook = (notebookId, callback) => {
-  Note.find({ notebook: mongoose.Types.ObjectId(notebookId) }).remove(callback);
-};
+module.exports.removeByNotebook = notebookId => (
+  Note.find({ notebook: mongoose.Types.ObjectId(notebookId) }).remove()
+);
