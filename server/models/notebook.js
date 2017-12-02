@@ -71,9 +71,15 @@ module.exports.getById = async (id) => {
   }
 };
 
-module.exports.addNotebook = (newNotebook, userId) => {
+module.exports.addNotebook = (newNotebook, id) => {
+  const userId = mongoose.Types.ObjectId(id);
   const notebook = new Notebook(
-    { owner: mongoose.Types.ObjectId(userId), ...newNotebook },
+    {
+      owner: userId,
+      editors: [userId],
+      viewers: [userId],
+      ...newNotebook,
+    },
   );
   return notebook.save();
 };
@@ -86,7 +92,7 @@ module.exports.updateNotebook = (id, newData) => {
 };
 
 module.exports.addViewer = (id, userId) => (
-  Notebook.findByIdAndUpdate(id, { $push: { viewers: mongoose.Types.ObjectId(userId) } })
+  Notebook.findByIdAndUpdate(id, { $addToSet: { viewers: mongoose.Types.ObjectId(userId) } })
 );
 
 module.exports.removeViewer = (id, userId) => (
@@ -94,7 +100,12 @@ module.exports.removeViewer = (id, userId) => (
 );
 
 module.exports.addEditor = (id, userId) => (
-  Notebook.findByIdAndUpdate(id, { $push: { editors: mongoose.Types.ObjectId(userId) } })
+  Notebook.findByIdAndUpdate(id, {
+    $addToSet: {
+      editors: mongoose.Types.ObjectId(userId),
+      viewers: mongoose.Types.ObjectId(userId),
+    },
+  })
 );
 
 module.exports.removeEditor = (id, userId) => (

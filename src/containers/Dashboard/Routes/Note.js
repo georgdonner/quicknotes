@@ -62,7 +62,6 @@ class NoteContainer extends Component {
     }
     const userId = this.props.user ? this.props.user.id : null;
     const canEdit = userId ? (userId === this.state.note.owner._id ||
-      userId === this.props.notebook.owner ||
       this.props.notebook.editors.includes(userId)) : null;
     return (
       <Aux>
