@@ -38,8 +38,6 @@ class Header extends Component {
 
     let rightNav = (
       <Aux>
-        {this.props.notebook ? this.props.notebook.name : null}
-        {this.props.user ? this.props.user.username : null}
         <NavIcon
           classes="is-hidden-tablet"
           clicked={() => this.setState({ showSearch: true })}
