@@ -8,12 +8,13 @@ const Sidebar = (props) => {
   if (props.type === 'notebooks' && props.notebooks) {
     content = props.notebooks.map((notebook) => {
       const active = props.activeNotebook && props.activeNotebook._id === notebook._id;
+      const url = notebook.notes.length > 0 ? `/note/${notebook.notes[0]._id}` : `/notebook/${notebook._id}`;
       return active ? (
         <div key={notebook._id} onClick={() => { props.updateType('notes'); }} >
           <li className="notebook active">{notebook.name}</li>
         </div>
       ) : (
-        <Link to={`/notebook/${notebook._id}`} key={notebook._id}>
+        <Link to={url} key={notebook._id}>
           <li className="notebook">{notebook.name}</li>
         </Link>
       );

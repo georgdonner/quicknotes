@@ -41,7 +41,7 @@ class NoteContainer extends Component {
         const result = await axios.get(`/api/notebook/${notebookId}`);
         const notebook = result.data;
         this.props.updateNotebook(notebook);
-        this.props.updateSidebarType('notebooks');
+        this.props.updateSidebarType('notes');
       } catch (error) {
         console.log('You can\'t view all of that notebook.');
       }
