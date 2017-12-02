@@ -18,6 +18,7 @@ class NoteContainer extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.state.note && nextProps.match.params.note !== this.state.note._id) {
       this.getNote(nextProps.match.params.note);
+      if (window.matchMedia('(max-width: 1199px)').matches) this.props.setSidebar(false);
     }
   }
 
@@ -79,6 +80,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   updateNotebook: notebook => dispatch({ type: 'NOTEBOOK_CHANGE', notebook }),
   updateSidebarType: sidebarType => dispatch({ type: 'UPDATE_SIDEBAR_TYPE', sidebarType }),
+  setSidebar: sidebar => dispatch({ type: 'SET_SIDEBAR', sidebar }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NoteContainer);

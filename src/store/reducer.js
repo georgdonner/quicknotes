@@ -23,6 +23,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         sidebar: !state.sidebar,
       };
+    case 'SET_SIDEBAR':
+      return {
+        ...state,
+        sidebar: action.sidebar,
+      };
     case 'UPDATE_SIDEBAR_TYPE':
       return {
         ...state,
