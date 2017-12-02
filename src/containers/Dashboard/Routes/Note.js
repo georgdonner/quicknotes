@@ -15,6 +15,12 @@ class NoteContainer extends Component {
     if (this.props.match.params.note) this.getNote(this.props.match.params.note);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.state.note && nextProps.match.params.note !== this.state.note._id) {
+      this.getNote(nextProps.match.params.note);
+    }
+  }
+
   async getNote(noteId) {
     try {
       const result = await axios.get(`/api/note/${noteId}`);
