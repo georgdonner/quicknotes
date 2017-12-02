@@ -1,3 +1,7 @@
+.button a {
+  color: inherit;
+}
+
 .CodeMirror {
   color: #333 !important;
   font-size: .8rem;

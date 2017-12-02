@@ -19,13 +19,11 @@ const Sidebar = (props) => {
       );
     });
   } else if (props.type === 'notes' && props.activeNotebook) {
-    content = props.activeNotebook.notes.map((note) => {
-      return (
-        <Link to={`/note/${note._id}`} key={note._id}>
-          <li className="notebook">{note.title}</li>
-        </Link>
-      );
-    });
+    content = props.activeNotebook.notes.map(note => (
+      <Link to={`/note/${note._id}`} key={note._id}>
+        <li className="notebook">{note.title}</li>
+      </Link>
+    ));
   }
 
   let closeButton;
