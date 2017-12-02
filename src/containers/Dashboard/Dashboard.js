@@ -40,7 +40,7 @@ class Dashboard extends Component {
       position: 'absolute',
       top: '60px',
       left: '240px',
-      transition: 'left .1s linear',
+      transition: 'all .1s linear',
       width: '100%',
       height: 'calc(100vh - 60px)',
     };
