@@ -2,17 +2,19 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import 'codemirror/lib/codemirror.css';
-import './NewNote.css';
+import './NoteForm.css';
 
 require('codemirror/mode/markdown/markdown');
 
-class NewNote extends Component {
+class NoteForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: '',
       notebookId: props.selected,
-      body: '',
+      note: {
+        title: '',
+        body: '',
+      },
     };
 
     this.titleChange = this.titleChange.bind(this);
@@ -20,8 +22,16 @@ class NewNote extends Component {
     this.bodyChange = this.bodyChange.bind(this);
   }
 
+  componentDidMount() {
+    if (this.props.note) {
+      this.setState({ note: this.props.note });
+    }
+  }
+
   titleChange(event) {
-    this.setState({ title: event.target.value });
+    const note = { ...this.state.note };
+    note.title = event.target.value;
+    this.setState({ note });
   }
 
   notebookChange(event) {
@@ -29,7 +39,9 @@ class NewNote extends Component {
   }
 
   bodyChange(event) {
-    this.setState({ body: event.target.value });
+    const note = { ...this.state.note };
+    note.body = event.target.value;
+    this.setState({ note });
   }
 
   render() {
@@ -39,42 +51,42 @@ class NewNote extends Component {
       </option>
     ));
 
+    const cancelUrl = this.props.updating ? `/note/${this.props.note._id}` : '/';
+
     return (
-      <div className="container is-fluid" id="newnote">
-        <div style={{ marginBottom: '2rem' }} id="notebook-topbar">
-          <h1 id="notebook-title">Create a new note</h1>
-        </div>
+      <div className="container is-fluid" id="noteform">
         <div className="field is-horizontal">
           <div className="field-body">
             <div className="field">
               <div className="control is-expanded">
                 <input
                   className="input" name="title" id="text" placeholder="Title"
-                  value={this.state.title} onChange={this.titleChange}
+                  value={this.state.note.title} onChange={this.titleChange}
                 />
               </div>
             </div>
-            <div className="field">
-              <div className="control is-expanded has-icons-left">
-                <div className="select" style={{ float: 'right' }}>
-                  <select
-                    value={this.state.notebookId}
-                    onChange={this.notebookChange}
-                  >
-                    {notebooks}
-                  </select>
-                  <span className="icon is-small is-left">
-                    <i className="fa fa-book" />
-                  </span>
+            {this.props.selected ? (
+              <div className="field">
+                <div className="control is-expanded has-icons-left">
+                  <div className="select" style={{ float: 'right' }}>
+                    <select
+                      value={this.state.notebookId}
+                      onChange={this.notebookChange}
+                    >
+                      {notebooks}
+                    </select>
+                    <span className="icon is-small is-left">
+                      <i className="fa fa-book" />
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </div>) : null}
           </div>
         </div>
         <div className="field editor-field">
           <div className="control">
             <CodeMirror
-              value={this.state.body}
+              value={this.state.note.body}
               className="editor"
               options={{
                 mode: 'markdown',
@@ -82,7 +94,9 @@ class NewNote extends Component {
                 lineWrapping: true,
               }}
               onBeforeChange={(editor, data, value) => {
-                this.setState({ body: value });
+                const note = { ...this.state.note };
+                note.body = value;
+                this.setState({ note });
               }}
             />
           </div>
@@ -91,17 +105,16 @@ class NewNote extends Component {
           <div className="control">
             <button
               className="button is-link"
-              onClick={() => this.props.onSubmit({
-                notebook: this.state.notebookId,
-                title: this.state.title,
-                body: this.state.body,
-              })}
+              onClick={this.props.updating ?
+                () => this.props.onUpdate(this.state.note) :
+                () => this.props.onAdd(this.state.note, this.state.notebookId)
+              }
             >
-              Create Note
+              {this.props.updating ? 'Update' : 'Create'} note
             </button>
           </div>
           <div className="control">
-            <Link to="/" replace><button className="button">Cancel</button></Link>
+            <Link to={cancelUrl} replace><button className="button">Cancel</button></Link>
           </div>
         </div>
       </div>
@@ -109,4 +122,4 @@ class NewNote extends Component {
   }
 }
 
-export default NewNote;
+export default NoteForm;

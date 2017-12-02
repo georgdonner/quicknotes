@@ -3,23 +3,18 @@ import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
-import NewNote from '../../../components/NewNote/NewNote';
+import NoteForm from '../../../components/NoteForm/NoteForm';
 
 class NewNoteHandler extends Component {
   constructor(props) {
     super(props);
-
     this.addNote = this.addNote.bind(this);
   }
 
-  async addNote(note) {
+  async addNote(note, notebook) {
     try {
-      const body = {
-        title: note.title,
-        body: note.body,
-      };
-      const created = await axios.post(`/api/notebook/${note.notebook}/new`, body);
-      this.props.history.push(`/note/${created._id}`);
+      const created = await axios.post(`/api/notebook/${notebook}/new`, note);
+      this.props.history.push(`/note/${created.data._id}`);
     } catch (err) {
       toast(err, { type: 'error', position: 'bottom-right' });
     }
@@ -31,10 +26,10 @@ class NewNoteHandler extends Component {
     if (!preSelected && this.props.notebooks.length > 0) preSelected = this.props.notebooks[0]._id;
 
     return preSelected ? (
-      <NewNote
+      <NoteForm
         notebooks={this.props.notebooks}
         selected={preSelected}
-        onSubmit={this.addNote}
+        onAdd={this.addNote}
       />
     ) : <h1>Loading...</h1>;
   }

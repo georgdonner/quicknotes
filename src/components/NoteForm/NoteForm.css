@@ -29,11 +29,11 @@
   padding-bottom: 1rem;
 }
 
-#newnote {
+#noteform {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 0 .5rem;
+  padding: .5rem;
   max-width: 1200px;
   margin: 0 auto;
 }

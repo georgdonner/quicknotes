@@ -1,5 +1,6 @@
 import React from 'react';
 import Markdown from 'react-markdown';
+import { Link } from 'react-router-dom';
 import './Note.css';
 
 const Note = (props) => {
@@ -12,6 +13,7 @@ const Note = (props) => {
         source={props.note.body} className="content"
         renderers={{ link: linkRenderer }}
       />
+      <Link to={`/note/${props.note._id}/edit`}><button className="button is-link">Edit</button></Link>
     </div>
   );
 };
