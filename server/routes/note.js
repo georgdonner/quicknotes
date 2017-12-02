@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const Note = require('../models/note');
+const Notebook = require('../models/notebook');
 
 // Get all notes
 router.get('/notebook/:notebook/all', async (req, res) => {
@@ -29,6 +30,7 @@ router.post('/notebook/:notebook/new', async (req, res) => {
   if (req.user) {
     try {
       const created = await Note.addNote(req.body, req.params.notebook, req.user._id);
+      Notebook.refreshUpdatedAt(created.notebook);
       return res.json(created);
     } catch (error) {
       return res.status(400).send(error.message);
@@ -42,6 +44,7 @@ router.put('/note/:note', async (req, res) => {
   const data = new Note(req.body);
   try {
     const updated = await Note.updateNote(req.params.note, data.toObject());
+    Notebook.refreshUpdatedAt(updated.notebook);
     return res.json(updated);
   } catch (error) {
     return res.status(400).send(error.message);

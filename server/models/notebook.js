@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 
-const Note = require('./note');
-
 const { Schema } = mongoose;
+const Note = mongoose.model('Note');
 
 const NotebookSchema = new Schema({
   name: {
@@ -90,6 +89,10 @@ module.exports.updateNotebook = (id, newData) => {
   } = newData;
   return Notebook.findByIdAndUpdate(id, { $set: data });
 };
+
+module.exports.refreshUpdatedAt = id => (
+  Notebook.findByIdAndUpdate(id, { updatedAt: Date.now() }).exec()
+);
 
 module.exports.addViewer = (id, userId) => (
   Notebook.findByIdAndUpdate(id, { $addToSet: { viewers: mongoose.Types.ObjectId(userId) } })
