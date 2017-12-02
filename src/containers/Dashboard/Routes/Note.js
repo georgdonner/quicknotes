@@ -55,14 +55,18 @@ class NoteContainer extends Component {
   }
 
   render() {
-    if (!this.state.error && !this.state.note) {
+    if (!this.state.error && (!this.state.note || !this.props.notebook)) {
       return <h1>Loading...</h1>;
     } else if (this.state.error) {
       return <h1>{this.state.error}</h1>;
     }
+    const userId = this.props.user ? this.props.user.id : null;
+    const canEdit = userId ? (userId === this.state.note.owner._id ||
+      userId === this.props.notebook.owner ||
+      this.props.notebook.editors.includes(userId)) : null;
     return (
       <Aux>
-        <Note note={this.state.note} />
+        <Note note={this.state.note} canEdit={canEdit} />
       </Aux>
     );
   }
@@ -70,6 +74,7 @@ class NoteContainer extends Component {
 
 const mapStateToProps = state => ({
   notebook: state.notebook,
+  user: state.user,
 });
 
 const mapDispatchToProps = dispatch => ({
