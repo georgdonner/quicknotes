@@ -18,8 +18,8 @@ class NewNoteHandler extends Component {
         title: note.title,
         body: note.body,
       };
-      await axios.post(`/api/notebook/${note.notebook}/new`, body);
-      this.props.history.push(`/notebook/${note.notebook}`);
+      const created = await axios.post(`/api/notebook/${note.notebook}/new`, body);
+      this.props.history.push(`/note/${created._id}`);
     } catch (err) {
       toast(err, { type: 'error', position: 'bottom-right' });
     }
