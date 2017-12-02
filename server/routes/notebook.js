@@ -18,7 +18,6 @@ function canView(doc, userId) {
 // Get one notebook
 router.get('/notebook/:notebook', async (req, res) => {
   try {
-    console.log(req.params);
     const notebook = await Notebook.getById(req.params.notebook);
     const authorized = req.user ? canView(notebook, req.user._id) : notebook.publicVisible;
     return authorized ? res.json(notebook) : res.status(401).send('You are not authorized to see this notebook');

@@ -45,7 +45,7 @@ module.exports.getByUser = async (id) => {
         { editors: mongoose.Types.ObjectId(id) },
         { viewers: mongoose.Types.ObjectId(id) },
       ],
-    });
+    }).sort({ updatedAt: -1 }).exec();
     const populateAll = [];
     notebooks.forEach((notebook) => {
       populateAll.push(Note.getAll(notebook._id));

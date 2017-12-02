@@ -31,11 +31,11 @@ const Note = mongoose.model('Note', NoteSchema);
 module.exports = Note;
 
 module.exports.getAll = notebookId => (
-  Note.find({ notebook: mongoose.Types.ObjectId(notebookId) }).populate('owner', 'username').exec()
+  Note.find({ notebook: mongoose.Types.ObjectId(notebookId) }).populate('owner', 'username').sort({ updatedAt: -1 }).exec()
 );
 
 module.exports.getById = id => (
-  Note.findById(id).populate('owner', 'username').exec()
+  Note.findById(id).populate('owner', 'username').sort({ updatedAt: -1 }).exec()
 );
 
 module.exports.addNote = (newNote, notebookId, userId) => {
@@ -49,7 +49,7 @@ module.exports.addNote = (newNote, notebookId, userId) => {
 
 module.exports.updateNote = (id, newData) => {
   const {
-    _id, ...data
+    _id, updatedAt, ...data
   } = newData;
   return Note.findByIdAndUpdate(id, data, { new: true });
 };
