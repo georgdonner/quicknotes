@@ -46,11 +46,7 @@ class Dashboard extends Component {
     };
     let sidebar;
     if (this.props.user) {
-      sidebar = (<Sidebar
-        notebooks={this.props.notebooks}
-        activeNotebook={this.props.notebook}
-        open={this.props.sidebar}
-      />);
+      sidebar = (<Sidebar />);
     }
     mainViewStyles.left = this.props.sidebar ? '240px' : '0px';
 
@@ -74,8 +70,6 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = state => ({
-  notebooks: state.notebooks,
-  notebook: state.notebook,
   sidebar: state.sidebar,
   user: state.user,
 });

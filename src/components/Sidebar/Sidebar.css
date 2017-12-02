@@ -19,6 +19,14 @@
   overflow-y: auto;
 }
 
+#close-button {
+  position: absolute;
+  top: 1.7rem;
+  left: 200px;
+  color: #666;
+  cursor: pointer;
+}
+
 .sidebar-header {
   display: inline-block;
   color: #456175;

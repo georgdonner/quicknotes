@@ -1,31 +1,67 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import './Sidebar.css';
 
 const Sidebar = (props) => {
-  const notebooks = props.notebooks.map((notebook) => {
-    let classes = 'notebook';
-    if (props.activeNotebook && props.activeNotebook._id === notebook._id) {
-      classes += ' active';
-    }
-    return (
-      <Link to={`/notebook/${notebook._id}`} key={notebook._id}>
-        <li className={classes}>{notebook.name}</li>
-      </Link>
+  let content;
+  if (props.type === 'notebooks' && props.notebooks) {
+    content = props.notebooks.map((notebook) => {
+      const active = props.activeNotebook && props.activeNotebook._id === notebook._id;
+      return active ? (
+        <div key={notebook._id} onClick={() => { props.updateType('notes'); }} >
+          <li className="notebook active">{notebook.name}</li>
+        </div>
+      ) : (
+        <Link to={`/notebook/${notebook._id}`} key={notebook._id}>
+          <li className="notebook">{notebook.name}</li>
+        </Link>
+      );
+    });
+  } else if (props.type === 'notes' && props.activeNotebook) {
+    content = props.activeNotebook.notes.map((note) => {
+      return (
+        <Link to={`/note/${note._id}`} key={note._id}>
+          <li className="notebook">{note.title}</li>
+        </Link>
+      );
+    });
+  }
+
+  let closeButton;
+  if (props.type === 'notes') {
+    closeButton = (
+      <span className="icon is-small" id="close-button" onClick={() => { props.updateType('notebooks'); }} >
+        <i className="fa fa-times" />
+      </span>
     );
-  });
+  }
+
   const sidebarPos = {
     left: 0,
   };
   if (!props.open) sidebarPos.left = '-240px';
+
   return (
     <span id="sidebar" style={sidebarPos}>
-      <h3 className="sidebar-header">Notebooks</h3>
+      {closeButton}
+      <h3 className="sidebar-header">{props.type}</h3>
       <ul>
-        {notebooks}
+        {content}
       </ul>
     </span>
   );
 };
 
-export default Sidebar;
+const mapStateToProps = state => ({
+  notebooks: state.notebooks,
+  activeNotebook: state.notebook,
+  type: state.sidebarType,
+  open: state.sidebar,
+});
+
+const mapDispatchToProps = dispatch => ({
+  updateType: sidebarType => dispatch({ type: 'UPDATE_SIDEBAR_TYPE', sidebarType }),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);

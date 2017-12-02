@@ -2,6 +2,7 @@ const initialState = {
   notebook: null,
   user: null,
   sidebar: false,
+  sidebarType: 'notebooks',
   notebooks: [],
 };
 
@@ -21,6 +22,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         sidebar: !state.sidebar,
+      };
+    case 'UPDATE_SIDEBAR_TYPE':
+      return {
+        ...state,
+        sidebarType: action.sidebarType,
       };
     case 'UPDATE_NOTEBOOKS':
       return {
