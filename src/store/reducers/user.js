@@ -2,7 +2,7 @@ const initialState = null;
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'USER_CHANGE':
+    case 'UPDATE_USER':
       return action.user;
     default:
       return state;

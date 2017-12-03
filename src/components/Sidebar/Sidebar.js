@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import * as actions from '../../store/actions';
 import './Sidebar.css';
 
 const Sidebar = (props) => {
@@ -60,7 +61,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateType: sidebarType => dispatch({ type: 'UPDATE_SIDEBAR_TYPE', sidebarType }),
+  updateType: sidebarType => dispatch(actions.setSidebarType(sidebarType)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);

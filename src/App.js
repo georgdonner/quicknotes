@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
+import * as actions from './store/actions';
 import AppRouter from './appRouter';
 
 class App extends Component {
@@ -44,9 +45,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateNotebooks: notebooks => dispatch({ type: 'UPDATE_NOTEBOOKS', notebooks }),
-  updateUser: user => dispatch({ type: 'USER_CHANGE', user }),
-  toggleSidebar: () => dispatch({ type: 'TOGGLE_SIDEBAR' }),
+  updateNotebooks: notebooks => dispatch(actions.updateNotebooks(notebooks)),
+  updateUser: user => dispatch(actions.updateUser(user)),
+  toggleSidebar: () => dispatch(actions.toggleSidebar()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

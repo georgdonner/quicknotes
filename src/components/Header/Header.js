@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Aux from '../../hoc/Auxiliary';
+import * as actions from '../../store/actions';
 import NotebooksMenu from './NotebooksMenu';
 import Searchbar from './Searchbar';
 import PlusButton from './PlusButton';
@@ -82,7 +83,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  toggleSidebar: () => dispatch({ type: 'TOGGLE_SIDEBAR' }),
+  toggleSidebar: () => dispatch(actions.toggleSidebar()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

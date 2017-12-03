@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
+import * as actions from '../../../store/actions';
 import Note from '../../../components/Note/Note';
 import Aux from '../../../hoc/Auxiliary';
 
@@ -78,9 +79,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateNotebook: notebook => dispatch({ type: 'NOTEBOOK_CHANGE', notebook }),
-  updateSidebarType: sidebarType => dispatch({ type: 'UPDATE_SIDEBAR_TYPE', sidebarType }),
-  setSidebar: sidebar => dispatch({ type: 'SET_SIDEBAR', sidebar }),
+  updateNotebook: notebook => dispatch(actions.updateNotebook(notebook)),
+  updateSidebarType: sidebarType => dispatch(actions.setSidebarType(sidebarType)),
+  setSidebar: sidebar => dispatch(actions.setSidebar(sidebar)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NoteContainer);

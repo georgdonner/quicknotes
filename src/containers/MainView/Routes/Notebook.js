@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
+import * as actions from '../../../store/actions';
 import Notebook from '../../../components/Notebook/Notebook';
 
 class NotebookContainer extends Component {
@@ -57,10 +58,7 @@ class NotebookContainer extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  updateNotebook: notebook => dispatch({
-    type: 'NOTEBOOK_CHANGE',
-    notebook,
-  }),
+  updateNotebook: notebook => dispatch(actions.updateNotebook(notebook)),
 });
 
 export default connect(null, mapDispatchToProps)(NotebookContainer);
