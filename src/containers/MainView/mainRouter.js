@@ -8,7 +8,7 @@ import NewNote from './Routes/NewNote';
 import EditNote from './Routes/EditNote';
 import NewNotebook from './Routes/NewNotebook';
 
-const DashboardRouter = () => (
+const MainRouter = () => (
   <Aux>
     <Route path="/notebook/:notebook" component={NotebookContainer} />
     <Route path="/note/:note/edit" component={EditNote} />
@@ -18,4 +18,4 @@ const DashboardRouter = () => (
   </Aux>
 );
 
-export default DashboardRouter;
+export default MainRouter;
