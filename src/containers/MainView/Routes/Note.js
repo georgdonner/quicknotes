@@ -73,7 +73,7 @@ class NoteContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-  notebook: state.notebook,
+  notebook: state.selection.notebook,
   user: state.user,
 });
 

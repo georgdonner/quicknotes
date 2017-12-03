@@ -38,7 +38,7 @@ class NewNoteHandler extends Component {
 }
 
 const mapStateToProps = state => ({
-  notebook: state.notebook,
+  notebook: state.selection.notebook,
   notebooks: state.notebooks,
   user: state.user,
 });

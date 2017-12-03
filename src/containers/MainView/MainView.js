@@ -39,7 +39,7 @@ const MainView = (props) => {
 };
 
 const mapStateToProps = state => ({
-  sidebar: state.sidebar,
+  sidebar: state.sidebar.open,
   user: state.user,
 });
 

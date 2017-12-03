@@ -54,9 +54,9 @@ const Sidebar = (props) => {
 
 const mapStateToProps = state => ({
   notebooks: state.notebooks,
-  activeNotebook: state.notebook,
-  type: state.sidebarType,
-  open: state.sidebar,
+  activeNotebook: state.selection.notebook,
+  type: state.sidebar.type,
+  open: state.sidebar.open,
 });
 
 const mapDispatchToProps = dispatch => ({
