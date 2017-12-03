@@ -2,11 +2,11 @@ import { combineReducers } from 'redux';
 import notebooks from './notebooks';
 import selection from './selection';
 import sidebar from './sidebar';
-import user from './user';
+import auth from './auth';
 
 export default combineReducers({
   notebooks,
   selection,
   sidebar,
-  user,
+  auth,
 });

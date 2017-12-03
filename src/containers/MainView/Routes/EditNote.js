@@ -48,7 +48,7 @@ class EditNoteHandler extends Component {
 const mapStateToProps = state => ({
   notebook: state.selection.notebook,
   notebooks: state.notebooks,
-  user: state.user,
+  user: state.auth.user,
 });
 
 export default connect(mapStateToProps)(EditNoteHandler);

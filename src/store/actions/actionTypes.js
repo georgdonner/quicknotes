@@ -3,4 +3,6 @@ export const NOTEBOOK_CHANGE = 'NOTEBOOK_CHANGE';
 export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
 export const SET_SIDEBAR = 'SET_SIDEBAR';
 export const SET_SIDEBAR_TYPE = 'SET_SIDEBAR_TYPE';
+export const AUTH_SUCCESS = 'AUTH_SUCCESS';
+export const AUTH_FAILED = 'AUTH_FAILED';
 export const UPDATE_USER = 'UPDATE_USER';

@@ -79,7 +79,7 @@ class Header extends Component {
 
 const mapStateToProps = state => ({
   notebook: state.selection.notebook,
-  user: state.user,
+  user: state.auth.user,
 });
 
 const mapDispatchToProps = dispatch => ({

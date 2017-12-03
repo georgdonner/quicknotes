@@ -10,5 +10,6 @@ export {
   toggleSidebar,
 } from './sidebar';
 export {
+  fetchUserAndNotebooks,
   updateUser,
 } from './user';
