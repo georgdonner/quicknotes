@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
-import axios from 'axios';
 
+import * as actions from '../../../store/actions';
 import NoteForm from '../../../components/NoteForm/NoteForm';
 
 class NewNoteHandler extends Component {
@@ -13,10 +13,10 @@ class NewNoteHandler extends Component {
 
   async addNote(note, notebook) {
     try {
-      const created = await axios.post(`/api/notebook/${notebook}/new`, note);
-      this.props.history.push(`/note/${created.data._id}`);
-    } catch (err) {
-      toast(err, { type: 'error', position: 'bottom-right' });
+      const created = await this.props.addNote(notebook, note);
+      this.props.history.push(`/note/${created._id}`);
+    } catch (error) {
+      toast(error, { type: 'error', position: 'bottom-right' });
     }
   }
 
@@ -43,4 +43,8 @@ const mapStateToProps = state => ({
   user: state.auth.user,
 });
 
-export default connect(mapStateToProps)(NewNoteHandler);
+const mapDispatchToProps = dispatch => ({
+  addNote: (notebook, note) => dispatch(actions.addNote(notebook, note)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewNoteHandler);

@@ -1,4 +1,5 @@
 export const UPDATE_NOTEBOOKS = 'UPDATE_NOTEBOOKS';
+export const ADD_NOTE = 'ADD_NOTE';
 export const NOTEBOOK_CHANGE = 'NOTEBOOK_CHANGE';
 export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
 export const SET_SIDEBAR = 'SET_SIDEBAR';

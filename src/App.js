@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import AppRouter from './appRouter';
 
 const App = (props) => {
-  console.log(props.authFinished);
   return props.authFinished ? (
     <AppRouter redirect={props.user} />
   ) : (
