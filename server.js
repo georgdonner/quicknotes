@@ -18,17 +18,17 @@ passport.use(new GitHubStrategy({
   callbackURL: process.env.GITHUB_CALLBACK_URL,
   scope: ['user:email'],
 },
-(accessToken, refreshToken, profile, done) => {
-  User.findOrCreate({
-    username: profile.username,
-    email: profile.emails[0].value,
-    githubId: profile.id,
-  }, (err, user) => {
-    if (err) {
-      return done(err);
-    }
+async (accessToken, refreshToken, profile, done) => {
+  try {
+    const user = await User.findOrCreate({
+      username: profile.username,
+      email: profile.emails[0].value,
+      githubId: profile.id,
+    });
     return done(null, user);
-  });
+  } catch (error) {
+    return done(error);
+  }
 },
 ));
 
@@ -65,10 +65,9 @@ app.get('/api/auth/callback',
   passport.authenticate('github', { failureRedirect: '/login' }),
   (req, res) => {
     if (process.env.NODE_ENV === 'production') {
-      res.redirect('/');
-    } else {
-      res.redirect('http://127.0.0.1:3000');
+      return res.redirect('/');
     }
+    return res.redirect('http://127.0.0.1:3000');
   },
 );
 
