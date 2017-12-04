@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
 
 import * as actions from '../../../store/actions';
 import Notebook from '../../../components/Notebook/Notebook';
@@ -9,37 +8,33 @@ class NotebookContainer extends Component {
   state = {
     notebook: null,
     error: null,
-    firstRequestOut: false,
   };
 
   componentDidMount() {
-    if (this.props.match.params.notebook) this.getNotebook(this.props.match.params.notebook);
+    if (this.props.match.params.notebook && this.props.notebooks) {
+      this.getNotebook(this.props.match.params.notebook);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    if ((this.state.notebook === null && !this.state.firstRequestOut) ||
-      (this.state.notebook && nextProps.match.params.notebook !== this.state.notebook._id)) {
+    if (this.props.notebooks && (this.state.notebook === null ||
+      (this.state.notebook && nextProps.match.params.notebook !== this.state.notebook._id))) {
       this.getNotebook(nextProps.match.params.notebook);
     }
   }
 
-  async getNotebook(notebookId) {
-    try {
-      this.setState({ firstRequestOut: true });
-      const result = await axios.get(`/api/notebook/${notebookId}`);
-      const notebook = result.data;
-      this.props.updateNotebook(notebook);
+  getNotebook(notebookId) {
+    this.props.selectNotebook(notebookId);
+    const notebook = this.props.notebooks.find(nb => nb._id === notebookId);
+    if (notebook) {
       this.setState({
         notebook,
         error: null,
       });
-    } catch (error) {
-      const errorMsg = error.response.status === 401
-        ? 'You don\'t have the permissions to view this notebook'
-        : 'Something went wrong :(';
+    } else {
       this.setState({
         notebook: null,
-        error: errorMsg,
+        error: 'Notebook not found',
       });
     }
   }
@@ -57,8 +52,12 @@ class NotebookContainer extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  updateNotebook: notebook => dispatch(actions.updateNotebook(notebook)),
+const mapStateToProps = state => ({
+  notebooks: state.notebooks,
 });
 
-export default connect(null, mapDispatchToProps)(NotebookContainer);
+const mapDispatchToProps = dispatch => ({
+  selectNotebook: notebook => dispatch(actions.selectNotebook(notebook)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(NotebookContainer);

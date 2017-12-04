@@ -3,7 +3,7 @@ export {
   updateNotebooks,
 } from './notebooks';
 export {
-  updateNotebook,
+  selectNotebook,
 } from './selection';
 export {
   setSidebar,

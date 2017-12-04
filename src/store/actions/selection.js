@@ -1,6 +1,6 @@
-import { NOTEBOOK_CHANGE } from './actionTypes';
+import { SELECT_NOTEBOOK } from './actionTypes';
 
-export const updateNotebook = notebook => ({
-  type: NOTEBOOK_CHANGE,
+export const selectNotebook = notebook => ({
+  type: SELECT_NOTEBOOK,
   notebook,
 });

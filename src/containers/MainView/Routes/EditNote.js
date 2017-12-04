@@ -46,7 +46,6 @@ class EditNoteHandler extends Component {
 }
 
 const mapStateToProps = state => ({
-  notebook: state.selection.notebook,
   notebooks: state.notebooks,
   user: state.auth.user,
 });

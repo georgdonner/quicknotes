@@ -23,7 +23,7 @@ class NewNoteHandler extends Component {
   render() {
     let error;
     let preSelected;
-    if (this.props.notebook) preSelected = this.props.notebook._id;
+    if (this.props.notebook) preSelected = this.props.notebook;
     else if (this.props.notebooks.length > 0) preSelected = this.props.notebooks[0]._id;
     else error = 'You have to create or join a notebook before creating notes!';
 

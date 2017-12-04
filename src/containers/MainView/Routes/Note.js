@@ -43,16 +43,10 @@ class NoteContainer extends Component {
     }
   }
 
-  async updateNotebook(notebookId) {
+  updateNotebook(notebookId) {
     if (!this.props.notebook || notebookId !== this.props.notebook._id) {
-      try {
-        const result = await axios.get(`/api/notebook/${notebookId}`);
-        const notebook = result.data;
-        this.props.updateNotebook(notebook);
-        this.props.updateSidebarType('notes');
-      } catch (error) {
-        console.log('You can\'t view all of that notebook.');
-      }
+      this.props.selectNotebook(notebookId);
+      this.props.updateSidebarType('notes');
     }
   }
 
@@ -74,12 +68,12 @@ class NoteContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-  notebook: state.selection.notebook,
+  notebook: state.notebooks.find(notebook => notebook._id === state.selection.notebook),
   user: state.auth.user,
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateNotebook: notebook => dispatch(actions.updateNotebook(notebook)),
+  selectNotebook: notebook => dispatch(actions.selectNotebook(notebook)),
   updateSidebarType: sidebarType => dispatch(actions.setSidebarType(sidebarType)),
   setSidebar: sidebar => dispatch(actions.setSidebar(sidebar)),
 });

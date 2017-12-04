@@ -78,7 +78,6 @@ class Header extends Component {
 }
 
 const mapStateToProps = state => ({
-  notebook: state.selection.notebook,
   user: state.auth.user,
 });
 

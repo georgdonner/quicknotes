@@ -1,4 +1,4 @@
-import { NOTEBOOK_CHANGE } from '../actions/actionTypes';
+import { SELECT_NOTEBOOK } from '../actions/actionTypes';
 
 const initialState = {
   notebook: null,
@@ -6,7 +6,7 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case NOTEBOOK_CHANGE:
+    case SELECT_NOTEBOOK:
       return {
         ...state,
         notebook: action.notebook,

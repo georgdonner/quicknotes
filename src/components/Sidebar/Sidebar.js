@@ -55,7 +55,7 @@ const Sidebar = (props) => {
 
 const mapStateToProps = state => ({
   notebooks: state.notebooks,
-  activeNotebook: state.selection.notebook,
+  activeNotebook: state.notebooks.find(notebook => notebook._id === state.selection.notebook),
   type: state.sidebar.type,
   open: state.sidebar.open,
 });

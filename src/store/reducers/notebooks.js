@@ -7,7 +7,6 @@ const reducer = (state = initialState, action) => {
     case UPDATE_NOTEBOOKS:
       return action.notebooks;
     case ADD_NOTE:
-      console.log('ADD NOTE');
       return action.note ? state.map((notebook) => {
         if (notebook._id === action.notebook) {
           return {
