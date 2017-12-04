@@ -38,13 +38,19 @@ module.exports = Notebook;
 
 module.exports.getByUser = async (id) => {
   try {
-    const notebooks = await Notebook.find({
-      $or: [
-        { owner: mongoose.Types.ObjectId(id) },
-        { editors: mongoose.Types.ObjectId(id) },
-        { viewers: mongoose.Types.ObjectId(id) },
-      ],
-    }).sort({ updatedAt: -1 }).exec();
+    const notebooks = await Notebook
+      .find({
+        $or: [
+          { owner: mongoose.Types.ObjectId(id) },
+          { editors: mongoose.Types.ObjectId(id) },
+          { viewers: mongoose.Types.ObjectId(id) },
+        ],
+      })
+      .populate('owner', 'username')
+      .populate('viewers', 'username')
+      .populate('editors', 'username')
+      .sort({ updatedAt: -1 })
+      .exec();
     const populateAll = [];
     notebooks.forEach((notebook) => {
       populateAll.push(Note.getAll(notebook._id));
@@ -62,7 +68,10 @@ module.exports.getByUser = async (id) => {
 
 module.exports.getById = async (id) => {
   try {
-    const notebook = await Notebook.findById(id);
+    const notebook = await Notebook.findById(id)
+      .populate('owner', 'username')
+      .populate('viewers', 'username')
+      .populate('editors', 'username');
     const notes = await Note.getAll(id);
     return { ...notebook._doc, notes };
   } catch (error) {
@@ -70,7 +79,7 @@ module.exports.getById = async (id) => {
   }
 };
 
-module.exports.addNotebook = (newNotebook, id) => {
+module.exports.addNotebook = async (newNotebook, id) => {
   const userId = mongoose.Types.ObjectId(id);
   const notebook = new Notebook(
     {
@@ -80,14 +89,23 @@ module.exports.addNotebook = (newNotebook, id) => {
       ...newNotebook,
     },
   );
-  return notebook.save();
+  const created = await notebook.save();
+  return Notebook.populate(created,
+    { path: 'owner', select: 'username' },
+    { path: 'viewers', select: 'username' },
+    { path: 'editors', select: 'username' },
+  );
 };
 
 module.exports.updateNotebook = (id, newData) => {
   const {
     _id, owner, viewers, editors, ...data
   } = newData;
-  return Notebook.findByIdAndUpdate(id, { $set: data });
+  return Notebook
+    .findByIdAndUpdate(id, { $set: data })
+    .populate('owner', 'username')
+    .populate('viewers', 'username')
+    .populate('editors', 'username');
 };
 
 module.exports.refreshUpdatedAt = id => (

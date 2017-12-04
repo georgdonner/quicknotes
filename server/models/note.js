@@ -38,20 +38,21 @@ module.exports.getById = id => (
   Note.findById(id).populate('owner', 'username').sort({ updatedAt: -1 }).exec()
 );
 
-module.exports.addNote = (newNote, notebookId, userId) => {
+module.exports.addNote = async (newNote, notebookId, userId) => {
   const note = new Note({
     owner: mongoose.Types.ObjectId(userId),
     notebook: mongoose.Types.ObjectId(notebookId),
     ...newNote,
   });
-  return note.save();
+  const created = await note.save();
+  return Note.populate(created, { path: 'owner', select: 'username' });
 };
 
 module.exports.updateNote = (id, newData) => {
   const {
     _id, updatedAt, ...data
   } = newData;
-  return Note.findByIdAndUpdate(id, data, { new: true });
+  return Note.findByIdAndUpdate(id, data, { new: true }).populate('owner', 'username');
 };
 
 module.exports.remove = id => (
