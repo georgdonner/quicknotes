@@ -32,7 +32,7 @@ class MainView extends Component {
       mainViewStyles.width = `calc(100% - ${mainViewStyles.left})`;
     }
 
-    return (
+    return this.props.notebooks ? (
       <div style={{ position: 'relative' }}>
         <Header
           notebook="Quicknotes"
@@ -43,11 +43,12 @@ class MainView extends Component {
           <MainRouter />
         </div>
       </div>
-    );
+    ) : <h1>Loading...</h1>;
   }
 }
 
 const mapStateToProps = state => ({
+  notebooks: state.notebooks,
   sidebar: state.sidebar.open,
   user: state.auth.user,
 });

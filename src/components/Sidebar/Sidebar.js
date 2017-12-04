@@ -21,11 +21,15 @@ const Sidebar = (props) => {
       );
     });
   } else if (props.type === 'notes' && props.activeNotebook) {
-    content = props.activeNotebook.notes.map(note => (
-      <Link to={`/note/${note._id}`} key={note._id}>
-        <li className="notebook">{note.title}</li>
-      </Link>
-    ));
+    content = props.activeNotebook.notes.map((note) => {
+      const active = note._id === props.activeNote;
+      const classes = active ? 'notebook active' : 'notebook';
+      return (
+        <Link to={`/note/${note._id}`} key={note._id}>
+          <li className={classes}>{note.title}</li>
+        </Link>
+      );
+    });
   }
 
   let closeButton;
@@ -56,6 +60,7 @@ const Sidebar = (props) => {
 const mapStateToProps = state => ({
   notebooks: state.notebooks,
   activeNotebook: state.notebooks.find(notebook => notebook._id === state.selection.notebook),
+  activeNote: state.selection.note,
   type: state.sidebar.type,
   open: state.sidebar.open,
 });

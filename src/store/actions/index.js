@@ -4,6 +4,7 @@ export {
 } from './notebooks';
 export {
   selectNotebook,
+  selectNote,
 } from './selection';
 export {
   setSidebar,

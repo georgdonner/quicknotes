@@ -1,6 +1,6 @@
 import { UPDATE_NOTEBOOKS, ADD_NOTE } from '../actions/actionTypes';
 
-const initialState = [];
+const initialState = null;
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
