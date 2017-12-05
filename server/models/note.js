@@ -50,7 +50,7 @@ module.exports.addNote = async (newNote, notebookId, userId) => {
 
 module.exports.updateNote = (id, newData) => {
   const {
-    _id, updatedAt, ...data
+    __v, _id, createdAt, updatedAt, ...data
   } = newData;
   return Note.findByIdAndUpdate(id, data, { new: true }).populate('owner', 'username');
 };

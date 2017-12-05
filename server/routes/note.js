@@ -41,9 +41,8 @@ router.post('/notebook/:notebook/new', async (req, res) => {
 
 // Update a note
 router.put('/note/:note', async (req, res) => {
-  const data = new Note(req.body);
   try {
-    const updated = await Note.updateNote(req.params.note, data.toObject());
+    const updated = await Note.updateNote(req.params.note, req.body);
     Notebook.refreshUpdatedAt(updated.notebook);
     return res.json(updated);
   } catch (error) {
