@@ -1,41 +1,34 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
 
 import * as actions from '../../../store/actions';
 import NoteForm from '../../../components/NoteForm/NoteForm';
 
-class NewNoteHandler extends Component {
-  constructor(props) {
-    super(props);
-    this.addNote = this.addNote.bind(this);
-  }
-
-  async addNote(note, notebook) {
+const NewNoteHandler = (props) => {
+  const addNote = async (note, notebook) => {
     try {
-      const created = await this.props.addNote(notebook, note);
-      this.props.history.push(`/note/${created._id}`);
+      const created = await props.addNote(notebook, note);
+      props.history.push(`/note/${created._id}`);
     } catch (error) {
       toast(error, { type: 'error', position: 'bottom-right' });
     }
-  }
+  };
 
-  render() {
-    let error;
-    let preSelected;
-    if (this.props.notebook) preSelected = this.props.notebook;
-    else if (this.props.notebooks.length > 0) preSelected = this.props.notebooks[0]._id;
-    else error = 'You have to create or join a notebook before creating notes!';
+  let error;
+  let preSelected;
+  if (props.notebook) preSelected = props.notebook;
+  else if (props.notebooks.length > 0) preSelected = props.notebooks[0]._id;
+  else error = 'You have to create or join a notebook before creating notes!';
 
-    return preSelected ? (
-      <NoteForm
-        notebooks={this.props.notebooks}
-        selected={preSelected}
-        onAdd={this.addNote}
-      />
-    ) : <h1>{error || 'Loading...'}</h1>;
-  }
-}
+  return preSelected ? (
+    <NoteForm
+      notebooks={props.notebooks}
+      selected={preSelected}
+      onAdd={addNote}
+    />
+  ) : <h1>{error || 'Loading...'}</h1>;
+};
 
 const mapStateToProps = state => ({
   notebook: state.selection.notebook,
