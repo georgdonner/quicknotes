@@ -22,5 +22,6 @@ export const fetchUserAndNotebooks = () => async (dispatch) => {
     dispatch(updateNotebooks(notebooksRes.data));
   } catch (error) {
     dispatch(authFailed());
+    dispatch(updateNotebooks([]));
   }
 };

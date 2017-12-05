@@ -13,7 +13,7 @@ router.get('/user', (req, res) => {
       email: req.user.email,
     });
   } else {
-    res.json(null);
+    res.status(401).json(null);
   }
 });
 
