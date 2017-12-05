@@ -1,4 +1,4 @@
-import { UPDATE_NOTEBOOKS, ADD_NOTE } from '../actions/actionTypes';
+import { UPDATE_NOTEBOOKS, ADD_NOTE, UPDATE_NOTE } from '../actions/actionTypes';
 
 const initialState = null;
 
@@ -12,6 +12,21 @@ const reducer = (state = initialState, action) => {
           return {
             ...notebook,
             notes: notebook.notes.concat([action.note]),
+          };
+        }
+        return notebook;
+      }) : state;
+    case UPDATE_NOTE:
+      return action.note ? state.map((notebook) => {
+        if (notebook._id === action.note.notebook) {
+          return {
+            ...notebook,
+            notes: notebook.notes.map((note) => {
+              if (note._id === action.note._id) {
+                return action.note;
+              }
+              return note;
+            }),
           };
         }
         return notebook;

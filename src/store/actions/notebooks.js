@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { UPDATE_NOTEBOOKS, ADD_NOTE } from './actionTypes';
+import { UPDATE_NOTEBOOKS, ADD_NOTE, UPDATE_NOTE } from './actionTypes';
 
 export const updateNotebooks = notebooks => ({
   type: UPDATE_NOTEBOOKS,
@@ -16,4 +16,15 @@ export const addNote = (notebook, note) => dispatch =>
         note: created,
       });
       return created;
+    });
+
+export const updateNote = note => dispatch =>
+  axios.put(`/api/note/${note._id}`, note)
+    .then((res) => {
+      const updated = res.status < 300 ? res.data : null;
+      dispatch({
+        type: UPDATE_NOTE,
+        note: updated,
+      });
+      return updated;
     });

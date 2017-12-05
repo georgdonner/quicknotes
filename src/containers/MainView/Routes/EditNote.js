@@ -1,53 +1,55 @@
-import React, { Component } from 'react';
-import { toast } from 'react-toastify';
+import React from 'react';
+import { toast, ToastContainer } from 'react-toastify';
 import { connect } from 'react-redux';
-import axios from 'axios';
 
+import Aux from '../../../hoc/Auxiliary';
+import * as actions from '../../../store/actions';
 import NoteForm from '../../../components/NoteForm/NoteForm';
 
-class EditNoteHandler extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      fetched: false,
-      note: null,
-    };
-    this.updateNote = this.updateNote.bind(this);
-  }
+const EditNoteHandler = (props) => {
+  const getNote = () => {
+    let found = null;
+    props.notebooks.forEach((notebook) => {
+      const note = notebook.notes.find(n => n._id === props.match.params.note);
+      if (note) found = note;
+    });
+    return found;
+  };
 
-  async componentDidMount() {
+  const updateNote = async (note) => {
     try {
-      const result = await axios.get(`/api/note/${this.props.match.params.note}`);
-      this.setState({ fetched: true, note: result.data });
-    } catch (error) {
-      toast(error, { type: 'error', position: 'bottom-right' });
-    }
-  }
-
-  async updateNote(note) {
-    try {
-      await axios.put(`/api/note/${note._id}`, note);
-      this.props.history.push(`/note/${note._id}`);
+      const updated = await props.updateNote(note);
+      if (updated) {
+        props.history.push(`/note/${updated._id}`);
+      } else {
+        toast.error('Could not update note :(', { position: 'bottom-right' });
+      }
     } catch (err) {
-      toast(err, { type: 'error', position: 'bottom-right' });
+      toast.error(`Could note update note: ${err.message}`, { position: 'bottom-right' });
     }
-  }
+  };
 
-  render() {
-    return this.state.fetched && this.state.note ? (
+  const note = getNote();
+  return note ? (
+    <Aux>
       <NoteForm
-        notebooks={this.props.notebooks}
-        note={this.state.note}
-        onUpdate={this.updateNote}
+        notebooks={props.notebooks}
+        note={note}
+        onUpdate={updateNote}
         updating
       />
-    ) : <h1>Loading...</h1>;
-  }
-}
+      <ToastContainer />
+    </Aux>
+  ) : <h1>Something went wrong :(</h1>;
+};
 
 const mapStateToProps = state => ({
   notebooks: state.notebooks,
   user: state.auth.user,
 });
 
-export default connect(mapStateToProps)(EditNoteHandler);
+const mapDispatchToProps = dispatch => ({
+  updateNote: note => dispatch(actions.updateNote(note)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditNoteHandler);
