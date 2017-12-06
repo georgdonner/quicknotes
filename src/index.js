@@ -4,7 +4,6 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import axios from 'axios';
-import 'react-toastify/dist/ReactToastify.min.css';
 
 import './index.css';
 import App from './App';
