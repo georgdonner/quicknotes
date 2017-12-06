@@ -1,6 +1,7 @@
 export {
   addNote,
   updateNote,
+  deleteNote,
   updateNotebooks,
 } from './notebooks';
 export {

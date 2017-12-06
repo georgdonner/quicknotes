@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { UPDATE_NOTEBOOKS, ADD_NOTE, UPDATE_NOTE } from './actionTypes';
+import { UPDATE_NOTEBOOKS, ADD_NOTE, UPDATE_NOTE, DELETE_NOTE } from './actionTypes';
 
 export const updateNotebooks = notebooks => ({
   type: UPDATE_NOTEBOOKS,
@@ -28,3 +28,10 @@ export const updateNote = note => dispatch =>
       });
       return updated;
     });
+
+export const deleteNote = note => dispatch =>
+  axios.delete(`/api/note/${note._id}`)
+    .then(() => dispatch({
+      type: DELETE_NOTE,
+      note,
+    }));

@@ -1,4 +1,4 @@
-import { UPDATE_NOTEBOOKS, ADD_NOTE, UPDATE_NOTE } from '../actions/actionTypes';
+import { UPDATE_NOTEBOOKS, ADD_NOTE, UPDATE_NOTE, DELETE_NOTE } from '../actions/actionTypes';
 
 const initialState = null;
 
@@ -27,6 +27,16 @@ const reducer = (state = initialState, action) => {
               }
               return note;
             }),
+          };
+        }
+        return notebook;
+      }) : state;
+    case DELETE_NOTE:
+      return action.note ? state.map((notebook) => {
+        if (notebook._id === action.note.notebook) {
+          return {/*  */
+            ...notebook,
+            notes: notebook.notes.filter(note => note._id !== action.note._id),
           };
         }
         return notebook;
