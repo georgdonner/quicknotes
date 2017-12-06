@@ -58,13 +58,11 @@ class NoteContainer extends Component {
     const userId = this.props.user ? this.props.user.id : null;
     const canEdit = userId ? (userId === this.props.note.owner._id ||
       this.props.notebook.editors.includes(userId)) : null;
-    const canDelete = userId ? (userId === this.props.note.owner._id) : null;
     return (
       <Aux>
         <Note
           note={this.props.note}
           canEdit={canEdit}
-          canDelete={canDelete}
           onDelete={this.deleteNote}
         />
         <ToastContainer />

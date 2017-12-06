@@ -2,6 +2,7 @@ import React from 'react';
 import Markdown from 'react-markdown';
 import { Link } from 'react-router-dom';
 import './Note.css';
+import Aux from '../../hoc/Auxiliary';
 
 const Note = (props) => {
   const linkRenderer = linkProps => <a href={linkProps.href} target="_blank">{linkProps.children}</a>;
@@ -13,9 +14,11 @@ const Note = (props) => {
         source={props.note.body} className="content"
         renderers={{ link: linkRenderer }}
       />
-      {props.canEdit ? <Link to={`/note/${props.note._id}/edit`}><button className="button is-link">Edit</button></Link> : null}
-      {props.canDelete ? (
-        <button id="delete" className="button is-danger" onClick={() => props.onDelete()}>Delete</button>
+      {props.canEdit ? (
+        <Aux>
+          <Link to={`/note/${props.note._id}/edit`}><button className="button is-link">Edit</button></Link>
+          <button id="delete" className="button is-danger" onClick={() => props.onDelete()}>Delete</button>
+        </Aux>
       ) : null}
     </div>
   );
