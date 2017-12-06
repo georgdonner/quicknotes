@@ -5,9 +5,11 @@ import * as actions from '../../store/actions';
 import './Sidebar.css';
 
 const Sidebar = (props) => {
+  const sortByDate = (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt);
+
   let content;
   if (props.type === 'notebooks' && props.notebooks) {
-    content = props.notebooks.map((notebook) => {
+    content = props.notebooks.sort(sortByDate).map((notebook) => {
       const active = props.activeNotebook && props.activeNotebook._id === notebook._id;
       const url = notebook.notes.length > 0 ? `/note/${notebook.notes[0]._id}` : `/notebook/${notebook._id}`;
       return active ? (
@@ -21,7 +23,7 @@ const Sidebar = (props) => {
       );
     });
   } else if (props.type === 'notes' && props.activeNotebook) {
-    content = props.activeNotebook.notes.map((note) => {
+    content = props.activeNotebook.notes.sort(sortByDate).map((note) => {
       const active = note._id === props.activeNote;
       const classes = active ? 'notebook active' : 'notebook';
       return (

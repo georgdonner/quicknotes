@@ -12,6 +12,7 @@ const reducer = (state = initialState, action) => {
           return {
             ...notebook,
             notes: notebook.notes.concat([action.note]),
+            updatedAt: new Date().toISOString(),
           };
         }
         return notebook;
@@ -27,6 +28,7 @@ const reducer = (state = initialState, action) => {
               }
               return note;
             }),
+            updatedAt: new Date().toISOString(),
           };
         }
         return notebook;
@@ -34,9 +36,10 @@ const reducer = (state = initialState, action) => {
     case DELETE_NOTE:
       return action.note ? state.map((notebook) => {
         if (notebook._id === action.note.notebook) {
-          return {/*  */
+          return {
             ...notebook,
             notes: notebook.notes.filter(note => note._id !== action.note._id),
+            updatedAt: new Date().toISOString(),
           };
         }
         return notebook;
