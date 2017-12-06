@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('cookie-session');
+const morgan = require('morgan');
 const path = require('path');
 
 const passport = require('passport');
@@ -50,6 +51,7 @@ const app = express();
 // express middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(morgan('dev'));
 app.use(session({
   name: 'quicknotes-session',
   secret: process.env.SESSION_SECRET,
