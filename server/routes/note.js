@@ -50,4 +50,15 @@ router.put('/note/:note', async (req, res) => {
   }
 });
 
+// Delete a note
+router.delete('/note/:note', async (req, res) => {
+  try {
+    const removed = await Note.removeNote(req.params.note);
+    Notebook.refreshUpdatedAt(removed.notebook);
+    return res.json({});
+  } catch (error) {
+    return res.status(400).send(error.message);
+  }
+});
+
 module.exports = router;

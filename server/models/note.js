@@ -55,7 +55,7 @@ module.exports.updateNote = (id, newData) => {
   return Note.findByIdAndUpdate(id, data, { new: true }).populate('owner', 'username');
 };
 
-module.exports.remove = id => (
+module.exports.removeNote = id => (
   Note.findByIdAndRemove(id)
 );
 
