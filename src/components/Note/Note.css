@@ -7,3 +7,7 @@
 #note-container #user-info {
   padding-top: .5rem;
 }
+
+#delete {
+  margin-left: .75rem;
+}

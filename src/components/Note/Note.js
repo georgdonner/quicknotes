@@ -14,6 +14,9 @@ const Note = (props) => {
         renderers={{ link: linkRenderer }}
       />
       {props.canEdit ? <Link to={`/note/${props.note._id}/edit`}><button className="button is-link">Edit</button></Link> : null}
+      {props.canDelete ? (
+        <button id="delete" className="button is-danger" onClick={() => props.onDelete()}>Delete</button>
+      ) : null}
     </div>
   );
 };
