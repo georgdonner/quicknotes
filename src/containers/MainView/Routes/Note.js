@@ -17,8 +17,9 @@ class NoteContainer extends Component {
   componentWillReceiveProps(nextProps) {
     if (!nextProps.note) {
       // note not found
-      if (!this.props.notebook || this.props.notebook.notes.length === 0) {
+      if (!this.props.notebook || nextProps.notebook.notes.length === 0) {
         // notebook not found or empty -> redirect
+        this.props.updateSidebarType('notebooks');
         this.props.history.push('/');
       } else {
         // note got deleted -> select another note from same notebook
