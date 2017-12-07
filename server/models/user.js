@@ -26,6 +26,10 @@ module.exports.getById = id => (
   User.findById(id)
 );
 
+module.exports.getByUsername = username => (
+  User.findOne({ username })
+);
+
 module.exports.findOrCreate = async (data) => {
   try {
     const userData = new User(data);
