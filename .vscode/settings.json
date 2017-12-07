@@ -1,5 +1,7 @@
 {
   "emmet.includeLanguages": {
     "javascript": "javascriptreact"
-  }
+  },
+  "gitlens.codeLens.enabled": false,
+  "gitlens.blame.line.enabled": false
 }
