@@ -27,6 +27,7 @@
   "scripts": {
     "start": "node server",
     "server": "nodemon server",
+    "debug": "nodemon --inspect server",
     "client": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
