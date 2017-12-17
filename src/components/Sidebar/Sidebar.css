@@ -43,7 +43,6 @@
 #sidebar .sidebar-item {
   padding: .75rem 1rem;
   text-overflow: ellipsis;
-  cursor: pointer;
 }
 
 #sidebar .sidebar-item.active {
@@ -52,6 +51,24 @@
 
 #sidebar .sidebar-item:hover {
   background: #f2f2f2;
+}
+
+#sidebar .sidebar-item:hover .edit-sidebar {
+  opacity: 1;
+}
+
+#sidebar .sidebar-link {
+  display: inline-block;
+  cursor: pointer;
+}
+
+#sidebar .edit-sidebar {
+  opacity: 0;
+  transition: all .25s ease;
+  cursor: pointer;
+  color: #666;
+  float: right;
+  margin-right: 4px;
 }
 
 #sidebar a {

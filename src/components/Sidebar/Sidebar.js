@@ -16,12 +16,14 @@ const Sidebar = (props) => {
         <SidebarItem active
           key={notebook._id}
           onClick={() => { props.updateType('notes'); }}
+          onEdit={() => alert('Edit')}
           text={notebook.name}
         />
       ) : (
         <SidebarItem
           key={notebook._id}
           url={url}
+          onEdit={() => alert('Edit')}
           text={notebook.name}
         />
       );
