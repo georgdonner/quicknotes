@@ -1,5 +1,8 @@
 import axios from 'axios';
-import { UPDATE_NOTEBOOKS, ADD_NOTEBOOK, ADD_NOTE, UPDATE_NOTE, DELETE_NOTE } from './actionTypes';
+import {
+  UPDATE_NOTEBOOKS, ADD_NOTEBOOK, UPDATE_NOTEBOOK,
+  ADD_NOTE, UPDATE_NOTE, DELETE_NOTE,
+} from './actionTypes';
 
 export const updateNotebooks = notebooks => ({
   type: UPDATE_NOTEBOOKS,
@@ -15,6 +18,17 @@ export const addNotebook = notebook => dispatch =>
         notebook: created,
       });
       return created;
+    });
+
+export const updateNotebook = notebook => dispatch =>
+  axios.put(`/api/notebook/${notebook._id}`, notebook)
+    .then((res) => {
+      const updated = res.status < 300 ? res.data : null;
+      dispatch({
+        type: UPDATE_NOTEBOOK,
+        notebook: updated,
+      });
+      return updated;
     });
 
 export const addNote = (notebook, note) => dispatch =>

@@ -14,7 +14,16 @@ const EditNotebookHandler = (props) => {
   );
 
   const updateNotebook = async (notebook) => {
-    console.log(notebook);
+    try {
+      const updated = await props.updateNotebook(notebook);
+      if (updated) {
+        props.history.push('/');
+      } else {
+        toast.error('Could not update notebook :(', { position: 'bottom-right' });
+      }
+    } catch (err) {
+      toast.error(`Could note update note: ${err.message}`, { position: 'bottom-right' });
+    }
   };
 
   const notebook = getNotebook();
@@ -32,11 +41,10 @@ const EditNotebookHandler = (props) => {
 
 const mapStateToProps = state => ({
   notebooks: state.notebooks,
-  user: state.auth.user,
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateNote: note => dispatch(actions.updateNote(note)),
+  updateNotebook: notebook => dispatch(actions.updateNotebook(notebook)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditNotebookHandler);
