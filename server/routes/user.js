@@ -23,7 +23,7 @@ router.get('/username/:username', async (req, res) => {
     const user = await User.getByUsername(req.params.username);
     return user ? res.json(user) : res.sendStatus(404);
   } catch (error) {
-    return res.status(500).send(error.message);
+    return res.status(500).json({ error: error.message });
   }
 });
 

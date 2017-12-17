@@ -22,7 +22,7 @@ router.get('/notebook/:notebook', async (req, res) => {
     const authorized = req.user ? canView(notebook, req.user._id) : notebook.publicVisible;
     return authorized ? res.json(notebook) : res.status(401).send('You are not authorized to see this notebook');
   } catch (error) {
-    return res.status(400).send(error.message);
+    return res.status(500).json({ error: error.message });
   }
 });
 
@@ -32,7 +32,7 @@ router.get('/notebooks', auth.checkAuth, async (req, res) => {
     const notebooks = await Notebook.getByUser(req.user._id);
     return res.json(notebooks);
   } catch (error) {
-    return res.status(400).send(error.message);
+    return res.status(500).json({ error: error.message });
   }
 });
 
@@ -42,7 +42,24 @@ router.post('/notebook', auth.checkAuth, async (req, res) => {
     const created = await Notebook.addNotebook(req.body, req.user._id);
     return res.json(created);
   } catch (error) {
-    return res.status(400).send(error.message);
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+// Update a notebook
+router.put('/notebook/:notebook', auth.checkAuth, async (req, res) => {
+  if (!req.body.owner) return res.status(400).json({ error: 'Notebook owner not in body.' });
+  const owner = req.body.owner._id || req.body.owner;
+  if (owner !== req.user._id) {
+    return res.status(401).json({
+      error: 'You must be the owner of the notebook to update it.',
+    });
+  }
+  try {
+    const updated = await Notebook.updateNotebook(req.params.notebook, req.body);
+    return res.json(updated);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
   }
 });
 

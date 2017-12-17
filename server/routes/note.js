@@ -11,7 +11,7 @@ router.get('/notebook/:notebook/all', async (req, res) => {
     const notes = await Note.getAll(req.params.notebook);
     return res.json(notes);
   } catch (error) {
-    return res.status(400).send(error.message);
+    return res.status(500).json({ error: error.message });
   }
 });
 
@@ -21,7 +21,7 @@ router.get('/note/:note', async (req, res) => {
     const note = await Note.getById(req.params.note);
     return res.json(note);
   } catch (error) {
-    return res.status(400).send(error.message);
+    return res.status(500).json({ error: error.message });
   }
 });
 
@@ -33,7 +33,7 @@ router.post('/notebook/:notebook/new', async (req, res) => {
       Notebook.refreshUpdatedAt(created.notebook);
       return res.json(created);
     } catch (error) {
-      return res.status(400).send(error.message);
+      return res.status(500).json({ error: error.message });
     }
   }
   return res.sendStatus(401);
@@ -46,7 +46,7 @@ router.put('/note/:note', async (req, res) => {
     Notebook.refreshUpdatedAt(updated.notebook);
     return res.json(updated);
   } catch (error) {
-    return res.status(400).send(error.message);
+    return res.status(500).json({ error: error.message });
   }
 });
 
@@ -57,7 +57,7 @@ router.delete('/note/:note', async (req, res) => {
     Notebook.refreshUpdatedAt(removed.notebook);
     return res.json({});
   } catch (error) {
-    return res.status(400).send(error.message);
+    return res.status(500).json({ error: error.message });
   }
 });
 

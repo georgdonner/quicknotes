@@ -26,7 +26,7 @@ const NotebookSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  publicEdit: {
+  publicEditable: {
     type: Boolean,
     default: false,
   },
@@ -99,7 +99,7 @@ module.exports.addNotebook = async (newNotebook, id) => {
 
 module.exports.updateNotebook = (id, newData) => {
   const {
-    _id, owner, viewers, editors, ...data
+    _id, owner, createdAt, updatedAt, ...data
   } = newData;
   return Notebook
     .findByIdAndUpdate(id, { $set: data })
