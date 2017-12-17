@@ -20,6 +20,13 @@ class NotebookForm extends Component {
     this.state = state;
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.notebook !== nextProps.notebook) {
+      const { notes, ...newState } = nextProps.notebook;
+      this.setState(newState);
+    }
+  }
+
   nameChange = (event) => {
     this.setState({
       name: event.target.value,
