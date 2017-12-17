@@ -40,17 +40,17 @@
   font-size: 1rem;
 }
 
-#sidebar .notebook {
+#sidebar .sidebar-item {
   padding: .75rem 1rem;
   text-overflow: ellipsis;
   cursor: pointer;
 }
 
-#sidebar .notebook.active {
+#sidebar .sidebar-item.active {
   background: #f2f2f2;
 }
 
-#sidebar .notebook:hover {
+#sidebar .sidebar-item:hover {
   background: #f2f2f2;
 }
 

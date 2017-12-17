@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
+import SidebarItem from './SidebarItem/SidebarItem';
 import './Sidebar.css';
 
 const Sidebar = (props) => {
@@ -13,23 +13,27 @@ const Sidebar = (props) => {
       const active = props.activeNotebook && props.activeNotebook._id === notebook._id;
       const url = notebook.notes.length > 0 ? `/note/${notebook.notes[0]._id}` : `/notebook/${notebook._id}`;
       return active ? (
-        <div key={notebook._id} onClick={() => { props.updateType('notes'); }} >
-          <li className="notebook active">{notebook.name}</li>
-        </div>
+        <SidebarItem active
+          key={notebook._id}
+          onClick={() => { props.updateType('notes'); }}
+          text={notebook.name}
+        />
       ) : (
-        <Link to={url} key={notebook._id}>
-          <li className="notebook">{notebook.name}</li>
-        </Link>
+        <SidebarItem
+          key={notebook._id}
+          url={url}
+          text={notebook.name}
+        />
       );
     });
   } else if (props.type === 'notes' && props.activeNotebook) {
     content = props.activeNotebook.notes.sort(sortByDate).map((note) => {
       const active = note._id === props.activeNote;
-      const classes = active ? 'notebook active' : 'notebook';
       return (
-        <Link to={`/note/${note._id}`} key={note._id}>
-          <li className={classes}>{note.title}</li>
-        </Link>
+        <SidebarItem
+          key={note._id} active={active}
+          url={`/note/${note._id}`} text={note.title}
+        />
       );
     });
   }
