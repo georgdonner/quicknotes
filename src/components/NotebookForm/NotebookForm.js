@@ -9,13 +9,15 @@ import UserTags from './UserTags/UserTags';
 class NotebookForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {
+    const notebook = props.notebook || {
       name: '',
       publicVisible: false,
       publicEditable: false,
       viewers: [],
       editors: [],
     };
+    const { notes, ...state } = notebook; // remove notes from object
+    this.state = state;
   }
 
   nameChange = (event) => {
@@ -63,7 +65,7 @@ class NotebookForm extends Component {
     }
   }
 
-  addNotebook = async () => {
+  submit = async () => {
     if (this.state.name !== '') {
       const notebook = {
         ...this.state,
@@ -93,8 +95,8 @@ class NotebookForm extends Component {
   }
 
   render() {
-    const cancelUrl = this.props.updating ? `/note/${this.props.note._id}` : '/';
-
+    const submitText = `${this.props.updating ? 'Update' : 'Create'} Notebook`;
+    const cancelUrl = this.props.updating ? `/notebook/${this.state._id}` : '/';
     return (
       <div id="note-container" className="container is-fluid">
         <div className="field">
@@ -149,7 +151,7 @@ class NotebookForm extends Component {
         </div>
         <div className="field is-grouped">
           <div className="control">
-            <button className="button is-link" onClick={this.addNotebook}>Create Notebook</button>
+            <button className="button is-link" onClick={this.submit}>{submitText}</button>
           </div>
           <div className="control">
             <Link to={cancelUrl} replace><button className="button">Cancel</button></Link>

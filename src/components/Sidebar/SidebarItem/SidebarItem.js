@@ -9,10 +9,10 @@ const SidebarItem = (props) => {
   ) : (
     <div className="sidebar-link" onClick={() => { props.onClick(); }} >{item}</div>
   );
-  const editButton = props.onEdit ? (
-    <span onClick={() => props.onEdit()} className="icon edit-sidebar">
+  const editButton = props.editUrl ? (
+    <Link to={props.editUrl} className="icon edit-sidebar">
       <i className="fa fa-pencil" />
-    </span>
+    </Link>
   ) : null;
   return (
     <div className={classes}>

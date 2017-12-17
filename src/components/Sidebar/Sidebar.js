@@ -11,19 +11,20 @@ const Sidebar = (props) => {
   if (props.type === 'notebooks' && props.notebooks) {
     content = props.notebooks.sort(sortByDate).map((notebook) => {
       const active = props.activeNotebook && props.activeNotebook._id === notebook._id;
-      const url = notebook.notes.length > 0 ? `/note/${notebook.notes[0]._id}` : `/notebook/${notebook._id}`;
+      const notebookUrl = `/notebook/${notebook._id}`;
+      const url = notebook.notes.length > 0 ? `/note/${notebook.notes[0]._id}` : notebookUrl;
       return active ? (
         <SidebarItem active
           key={notebook._id}
           onClick={() => { props.updateType('notes'); }}
-          onEdit={() => alert('Edit')}
+          editUrl={`${notebookUrl}/edit`}
           text={notebook.name}
         />
       ) : (
         <SidebarItem
           key={notebook._id}
           url={url}
-          onEdit={() => alert('Edit')}
+          editUrl={`${notebookUrl}/edit`}
           text={notebook.name}
         />
       );
