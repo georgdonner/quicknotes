@@ -97,15 +97,17 @@ module.exports.addNotebook = async (newNotebook, id) => {
   return { ...populated._doc, notes: [] };
 };
 
-module.exports.updateNotebook = (id, newData) => {
+module.exports.updateNotebook = async (id, newData) => {
   const {
     _id, owner, createdAt, updatedAt, ...data
   } = newData;
-  return Notebook
-    .findByIdAndUpdate(id, { $set: data })
+  const updated = await Notebook
+    .findByIdAndUpdate(id, { $set: data }, { new: true })
     .populate('owner', 'username')
     .populate('viewers', 'username')
     .populate('editors', 'username');
+  const notes = await Note.getAll(id);
+  return { ...updated._doc, notes };
 };
 
 module.exports.refreshUpdatedAt = id => (

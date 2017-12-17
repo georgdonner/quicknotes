@@ -20,7 +20,9 @@ router.get('/notebook/:notebook', async (req, res) => {
   try {
     const notebook = await Notebook.getById(req.params.notebook);
     const authorized = req.user ? canView(notebook, req.user._id) : notebook.publicVisible;
-    return authorized ? res.json(notebook) : res.status(401).send('You are not authorized to see this notebook');
+    return authorized ? res.json(notebook) : res.status(401).json({
+      error: 'You are not authorized to see this notebook',
+    });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
