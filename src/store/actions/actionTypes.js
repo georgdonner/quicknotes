@@ -1,4 +1,5 @@
 export const UPDATE_NOTEBOOKS = 'UPDATE_NOTEBOOKS';
+export const ADD_NOTEBOOK = 'ADD_NOTEBOOK';
 export const ADD_NOTE = 'ADD_NOTE';
 export const UPDATE_NOTE = 'UPDATE_NOTE';
 export const DELETE_NOTE = 'DELETE_NOTE';

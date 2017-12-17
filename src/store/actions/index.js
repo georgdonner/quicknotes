@@ -1,4 +1,5 @@
 export {
+  addNotebook,
   addNote,
   updateNote,
   deleteNote,

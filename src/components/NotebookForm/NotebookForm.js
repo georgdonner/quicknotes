@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import axios from 'axios';
 
@@ -92,6 +93,8 @@ class NotebookForm extends Component {
   }
 
   render() {
+    const cancelUrl = this.props.updating ? `/note/${this.props.note._id}` : '/';
+
     return (
       <div id="note-container" className="container is-fluid">
         <div className="field">
@@ -149,7 +152,7 @@ class NotebookForm extends Component {
             <button className="button is-link" onClick={this.addNotebook}>Create Notebook</button>
           </div>
           <div className="control">
-            <button className="button" onClick={() => this.props.onCancel()}>Cancel</button>
+            <Link to={cancelUrl} replace><button className="button">Cancel</button></Link>
           </div>
         </div>
         <ToastContainer />

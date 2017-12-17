@@ -1,10 +1,21 @@
 import axios from 'axios';
-import { UPDATE_NOTEBOOKS, ADD_NOTE, UPDATE_NOTE, DELETE_NOTE } from './actionTypes';
+import { UPDATE_NOTEBOOKS, ADD_NOTEBOOK, ADD_NOTE, UPDATE_NOTE, DELETE_NOTE } from './actionTypes';
 
 export const updateNotebooks = notebooks => ({
   type: UPDATE_NOTEBOOKS,
   notebooks,
 });
+
+export const addNotebook = notebook => dispatch =>
+  axios.post('/api/notebook', notebook)
+    .then((res) => {
+      const created = res.status < 300 ? res.data : null;
+      dispatch({
+        type: ADD_NOTEBOOK,
+        notebook: created,
+      });
+      return created;
+    });
 
 export const addNote = (notebook, note) => dispatch =>
   axios.post(`/api/notebook/${notebook}/new`, note)

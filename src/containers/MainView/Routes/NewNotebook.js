@@ -1,25 +1,24 @@
-import React, { Component } from 'react';
-// import axios from 'axios';
+import React from 'react';
+import { toast } from 'react-toastify';
+import { connect } from 'react-redux';
 
+import * as actions from '../../../store/actions';
 import NotebookForm from '../../../components/NotebookForm/NotebookForm';
 
-class NewNotebookHandler extends Component {
-  onCancel = () => {
-    this.props.history.push('/');
-  }
+const NewNotebookHandler = (props) => {
+  const addNotebook = async (notebook) => {
+    try {
+      const created = await props.addNotebook(notebook);
+      props.history.push(`/notebook/${created._id}`);
+    } catch (error) {
+      toast(error, { type: 'error', position: 'bottom-right' });
+    }
+  };
+  return <NotebookForm onSubmit={notebook => addNotebook(notebook)} />;
+};
 
-  addNotebook = (notebook) => {
-    console.log(notebook);
-  }
+const mapDispatchToProps = dispatch => ({
+  addNotebook: notebook => dispatch(actions.addNotebook(notebook)),
+});
 
-  render() {
-    return (
-      <NotebookForm
-        onSubmit={notebook => this.addNotebook(notebook)}
-        onCancel={this.onCancel}
-      />
-    );
-  }
-}
-
-export default NewNotebookHandler;
+export default connect(null, mapDispatchToProps)(NewNotebookHandler);

@@ -1,4 +1,4 @@
-import { UPDATE_NOTEBOOKS, ADD_NOTE, UPDATE_NOTE, DELETE_NOTE } from '../actions/actionTypes';
+import { UPDATE_NOTEBOOKS, ADD_NOTEBOOK, ADD_NOTE, UPDATE_NOTE, DELETE_NOTE } from '../actions/actionTypes';
 
 const initialState = null;
 
@@ -6,6 +6,8 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_NOTEBOOKS:
       return action.notebooks;
+    case ADD_NOTEBOOK:
+      return action.notebook ? state.concat(action.notebook) : null;
     case ADD_NOTE:
       return action.note ? state.map((notebook) => {
         if (notebook._id === action.notebook) {
