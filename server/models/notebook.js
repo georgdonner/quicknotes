@@ -90,11 +90,11 @@ module.exports.addNotebook = async (newNotebook, id) => {
     },
   );
   const created = await notebook.save();
-  return Notebook.populate(created,
-    { path: 'owner', select: 'username' },
-    { path: 'viewers', select: 'username' },
-    { path: 'editors', select: 'username' },
-  );
+  const populated = await Notebook.findById(created._id)
+    .populate('owner', 'username')
+    .populate('viewers', 'username')
+    .populate('editors', 'username');
+  return { ...populated._doc, notes: [] };
 };
 
 module.exports.updateNotebook = (id, newData) => {
